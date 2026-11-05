@@ -1,24 +1,25 @@
-<h1>{{ title }}</h1>
+<h2>{{ title }}</h2>
 
-<h2>Étape 2 : liste de héros</h2>
+<div class="page">
+  <ul class="heroes">
+    @for (hero of heroesModel(); track hero.id) {
+      <li>
+        <button type="button" (click)="onSelect(hero)"
+          [class.selected]="hero.id === selectedHeroModel()?.id">
+          <span class="id">{{ hero.id }}</span>
+          <span class="nom">{{ hero.name }}</span>
+          <span class="classe">{{ hero.classe ?? '-' }}</span>
+          <span class="actif">{{ hero.actif ? "&check;" : "&#10007;" }}</span>
+        </button>
+      </li>
+    }
+  </ul>
 
-<ul class="heroes">
-  @for (hero of heroesModel(); track hero.id) {
-    <li>
-      <button type="button" (click)="onSelect(hero)" 
-        [class.selected]="hero === selectedHeroModel()">
-        <span>{{hero.id}}</span>&nbsp;
-        <span>{{hero.name}}</span>&nbsp;
-        <span>{{ hero.actif ? "&check;" : "&#10007;" }}</span>
-      </button>
-    </li>
-  }
-</ul>
-
-@if (selectedHeroModel(); as hero) {
-    <!-- 1. Affichage propre des détails via le composant dédié -->
-    <app-hero-detail-component [hero]="hero"></app-hero-detail-component>
-    <app-hero-edit-component [hero]="hero" (heroChange)="onHeroChange($event)"></app-hero-edit-component>
-} @else {
-    <p>Aucun héros sélectionné</p>
-}
+  <aside class="edition">
+    @if (selectedHeroModel(); as hero) {
+      <app-hero-edit-component [hero]="hero" (heroChange)="onHeroChange($event)" />
+    } @else {
+      <p>Aucun héros sélectionné</p>
+    }
+  </aside>
+</div>
