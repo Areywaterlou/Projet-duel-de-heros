@@ -1,0 +1,16 @@
+<h2>Top Héros</h2>
+
+<div class="tier-list">
+  @for (tier of tiers(); track tier.classe) {
+    <div class="tier">
+      <div class="tier-label" [attr.data-classe]="tier.classe">{{ tier.classe }}</div>
+      <div class="tier-heroes">
+        @for (hero of tier.heroes; track hero.id) {
+          <a [routerLink]="['/detail', hero.id]" [class.inactif]="!hero.actif">{{ hero.name }}</a>
+        } @empty {
+          <span class="vide">Aucun héros</span>
+        }
+      </div>
+    </div>
+  }
+</div>

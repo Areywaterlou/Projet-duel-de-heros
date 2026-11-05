@@ -1,43 +1,39 @@
-import { HeroInterface } from "../../data/heroInterface";
-import { UpperCasePipe } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
-import { FormField } from '@angular/forms/signals';
-import { HeroEditComponent } from '../hero-edit-component/hero-edit-component';
-import { HeroDetailComponent } from '../hero-details-component/hero-detail-component';
+import { Component, OnInit,inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { HeroInterface } from '../../data/heroInterface';
 import { HeroService } from '../../services/hero-service';
 import { MessageService } from '../../services/message-service';
+import { HeroEditComponent } from '../hero-edit-component/hero-edit-component';
 
 @Component({
-  imports: [FormField, UpperCasePipe, HeroEditComponent, HeroDetailComponent],
   selector: 'app-heroes-component',
+  imports: [RouterLink, HeroEditComponent],
   styleUrl: './heroes-component.css',
   templateUrl: './heroes-component.html',
 })
-export class HeroesComponent {
+export class HeroesComponent implements OnInit {
   private heroService = inject(HeroService);
   private messageService = inject(MessageService);
-  
-  title = 'Mon Titre de Héros';
 
+  title = 'Mes héros';
   heroesModel = signal<HeroInterface[]>([]);
   selectedHeroModel = signal<HeroInterface | null>(null);
 
-  onSelect(hero: HeroInterface): void {
-    this.selectedHeroModel.set(hero);
-    this.messageService.add(`Sélection : Héros "${hero.name}" (ID: ${hero.id})`);
-    console.log(this.selectedHeroModel());
-  }
-  
-  protected onHeroChange(updatedHero: HeroInterface) {
-    this.heroesModel.update((heroes) =>
-      heroes.map((hero) => (hero.id === updatedHero.id ? updatedHero : hero)),
-    );
-    this.selectedHeroModel.set(updatedHero);
+  ngOnInit(): void {
+    this.heroService.getHeroes().subscribe((heroes) => this.heroesModel.set(heroes));
   }
 
-  ngOnInit() {
-    this.heroService.getHeroes().subscribe((heroes) => {
-      this.heroesModel.set(heroes);
+  onSelect(hero: HeroInterface): void {
+    this.selectedHeroModel.set(hero);
+    this.messageService.add(`Sélection : Héros "${hero.name}"`);
+  }
+
+  protected onHeroChange(updatedHero: HeroInterface): void {
+    this.heroService.updateHero(updatedHero).subscribe(() => {
+      this.heroesModel.update((heroes) =>
+        heroes.map((hero) => (hero.id === updatedHero.id ? updatedHero : hero)),
+      );
+      this.selectedHeroModel.set(updatedHero);
     });
   }
 }

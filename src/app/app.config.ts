@@ -6,6 +6,7 @@ import { getFirestore } from 'firebase/firestore';
 import { routes } from './app.routes';
 import { FIREBASE_APP, FIREBASE_AUTH, firebaseConfig, FIRESTORE } from './firebase.config';
 
+ 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -25,4 +26,6 @@ export const appConfig: ApplicationConfig = {
       deps: [FIREBASE_APP]
     }
   ]
+  ],
 };
+ 

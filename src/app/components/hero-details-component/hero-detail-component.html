@@ -1,4 +1,14 @@
-<div><b>Détails de {{ hero().name }}</b></div>
-<div>id: {{ hero().id }}</div>
-<div>name: {{ hero().name }}</div>
-<div>actif: {{ hero().actif ? "&check;" : "&#10007;" }}</div>
+@if (hero(); as currentHero) {
+  <h2>Détails de {{ currentHero.name | uppercase }}</h2>
+  <div>id: {{ currentHero.id }}</div>
+  <div>nom: {{ currentHero.name }}</div>
+  <div>actif: {{ currentHero.actif ? "&check;" : "&#10007;" }}</div>
+  <div>pouvoir: {{ currentHero.pouvoir ?? 'Inconnu' }}</div>
+  <div>début d'activité: {{ currentHero.debutActivite ? (currentHero.debutActivite | date: 'dd/MM/yyyy') : 'Inconnu' }}</div>
+  <div>classe: {{ currentHero.classe ?? 'Non classé' }}</div>
+
+  <button type="button" (click)="goBack()">Retour</button>
+} @else {
+  <p>Héros introuvable.</p>
+  <button type="button" (click)="goBack()">Retour</button>
+}
