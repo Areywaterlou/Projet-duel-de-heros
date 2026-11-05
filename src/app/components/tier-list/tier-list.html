@@ -1,0 +1,47 @@
+<section class="tier-list">
+  <h2>Tier List des héros</h2>
+
+  @if (chargement()) {
+    <p>Chargement des héros...</p>
+  } @else if (erreur()) {
+    <p class="error" role="alert">{{ erreur() }}</p>
+  } @else {
+    @for (groupe of groupes(); track groupe.rang) {
+      <section class="rank-row" [class]="'rank-row rank-' + groupe.rang.toLowerCase()">
+        <h3>{{ groupe.nom }}</h3>
+        @if (groupe.heros.length > 0) {
+          <ul>
+            @for (hero of groupe.heros; track hero.id) {
+              <li>
+                <a [routerLink]="['/heros', hero.id]">{{ hero.nom }}</a>
+                <span>{{ hero.classe }}</span>
+                <span>PV {{ hero.pointsDeVie }}</span>
+                <span>Attaque {{ hero.attaque }}</span>
+                <span>Défense {{ hero.defense }}</span>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="empty">Aucun héros dans ce rang.</p>
+        }
+      </section>
+    }
+
+    @if (herosSansRang().length > 0) {
+      <section class="rank-row rank-unranked">
+        <h3>Sans rang</h3>
+        <ul>
+          @for (hero of herosSansRang(); track hero.id) {
+            <li>
+              <a [routerLink]="['/heros', hero.id]">{{ hero.nom }}</a>
+              <span>{{ hero.classe }}</span>
+              <span>PV {{ hero.pointsDeVie }}</span>
+              <span>Attaque {{ hero.attaque }}</span>
+              <span>Défense {{ hero.defense }}</span>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  }
+</section>

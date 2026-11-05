@@ -1,63 +1,41 @@
-# ReymonarToH2026
+# Angular — Duel de Héros
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.0.
+Application de démonstration réalisée pendant l’apprentissage d’Angular.
 
-## Development server
+## Développement
 
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Installez les dépendances puis démarrez le serveur local :
 
 ```bash
-ng generate component component-name
+npm install
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+L’application est disponible sur `http://localhost:4200/`.
+
+Pour compiler le projet ou lancer les tests Angular :
 
 ```bash
-ng generate --help
+npx ng build
+npx ng test
 ```
 
-## Building
+## Intégration Firebase
 
-To build the project run:
+Firebase est configuré avec le SDK JavaScript modulaire, directement dans l’application Angular standalone :
 
-```bash
-ng build
-```
+- `src/app/firebase.config.ts` contient la configuration du projet et les tokens d’injection Firebase.
+- `src/app/app.config.ts` initialise l’application Firebase et enregistre les providers pour Firebase App, Authentication et Cloud Firestore.
+- `src/app/services/firebase.service.ts` expose les instances et les opérations Firestore pour la collection `heros`.
+- `src/app/data/hero.ts` définit les données d’un héros et les rangs `S`, `A`, `B`, `C` et `D`.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Pages de l’application
 
-## Running unit tests
+- `/` et `/tier-list` affichent les héros chargés depuis Firestore, classés par rang. Les noms mènent à leur page de détails.
+- `/heros/:id` affiche les caractéristiques détaillées d’un héros.
+- `/ajouter` propose un formulaire réactif pour créer un héros. Après l’enregistrement, l’application redirige vers la Tier List.
+- Si la collection Firestore `heros` est vide à l’ouverture de la Tier List, six héros de démonstration sont insérés une seule fois depuis `src/app/data/demo-heroes.ts`.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Pour Authentication, utilisez `this.firebase.auth` avec les fonctions correspondantes de `firebase/auth`.
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-=======
-# Angular
-Stockage de mon travail au fur et a mesure de mon apprentissage d'angular
->>>>>>> d6ff536085b9f6e84378c0c1f5dca6ab115f5e48
+La configuration Firebase inclut une clé API destinée à l’application cliente ; elle ne remplace pas les contrôles d’accès. Restreignez cette clé dans Google Cloud lorsque c’est possible et configurez les règles de sécurité Firestore ainsi que les méthodes autorisées dans Firebase Authentication.

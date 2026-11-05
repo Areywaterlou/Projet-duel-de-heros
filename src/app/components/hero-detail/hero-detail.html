@@ -1,0 +1,39 @@
+<section class="hero-detail">
+  <a class="back-link" routerLink="/tier-list">← Retour à la Tier List</a>
+
+  @if (chargement()) {
+    <p>Chargement des détails...</p>
+  } @else if (erreur()) {
+    <p class="error" role="alert">{{ erreur() }}</p>
+  } @else if (hero(); as detail) {
+    <article>
+      <header>
+        <h2>{{ detail.nom }}</h2>
+        <span class="rank-badge">{{ detail.rang ?? 'Sans rang' }}</span>
+      </header>
+
+      <dl>
+        <div>
+          <dt>Classe</dt>
+          <dd>{{ detail.classe }}</dd>
+        </div>
+        <div>
+          <dt>Points de vie</dt>
+          <dd>{{ detail.pointsDeVie }}</dd>
+        </div>
+        <div>
+          <dt>Attaque</dt>
+          <dd>{{ detail.attaque }}</dd>
+        </div>
+        <div>
+          <dt>Défense</dt>
+          <dd>{{ detail.defense }}</dd>
+        </div>
+        <div>
+          <dt>Rang</dt>
+          <dd>{{ detail.rang ?? 'Sans rang' }}</dd>
+        </div>
+      </dl>
+    </article>
+  }
+</section>
