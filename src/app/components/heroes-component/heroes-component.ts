@@ -1,5 +1,4 @@
 import { Component, OnInit,inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { HeroInterface } from '../../data/heroInterface';
 import { HeroService } from '../../services/hero-service';
 import { MessageService } from '../../services/message-service';
@@ -7,7 +6,7 @@ import { HeroEditComponent } from '../hero-edit-component/hero-edit-component';
 
 @Component({
   selector: 'app-heroes-component',
-  imports: [RouterLink, HeroEditComponent],
+  imports: [HeroEditComponent],
   styleUrl: './heroes-component.css',
   templateUrl: './heroes-component.html',
 })

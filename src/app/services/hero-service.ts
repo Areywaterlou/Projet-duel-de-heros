@@ -1,10 +1,12 @@
-import { Service, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HeroInterface } from '../data/heroInterface';
 import { HEROES } from '../data/mock-heroes';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message-service';
 
-@Service()
+@Injectable({
+  providedIn: 'root',
+})
 export class HeroService {
   private messageService = inject(MessageService);
 

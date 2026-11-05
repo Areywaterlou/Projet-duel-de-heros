@@ -1,29 +1,10 @@
-<header class="app-header">
-  <h1>Duel de Héros</h1>
-  <nav aria-label="Navigation principale">
-    <a routerLink="/tier-list" routerLinkActive="active">
-      Tier List
-    </a>
-    <a
-      routerLink="/ajouter"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
-      Ajouter un héros
-    </a>
-  </nav>
-</header>
-
-<main>
-  <router-outlet></router-outlet>
-</main>
 <h1>{{ title() }}</h1>
 
-<nav>
+<nav aria-label="Navigation principale">
+  <a routerLink="/tier-list" routerLinkActive="active">Tier List</a>
   <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
   <a routerLink="/heroes" routerLinkActive="active">Heroes</a>
+  <a routerLink="/ajouter" routerLinkActive="active">Ajouter un héros</a>
 </nav>
 
-<router-outlet></router-outlet>
-
-<app-messages></app-messages>
+<router-outlet />

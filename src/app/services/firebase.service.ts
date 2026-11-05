@@ -63,7 +63,7 @@ export class FirebaseService {
 
   async initialiserHerosSiVide(): Promise<HeroDocument[]> {
     const heroCollection = collection(this.firestore, 'heros');
-    const snapshot = await getDocs(heroCollection);
+    let snapshot = await getDocs(heroCollection);
 
     if (snapshot.empty) {
       const batch = writeBatch(this.firestore);
@@ -71,11 +71,20 @@ export class FirebaseService {
         batch.set(doc(heroCollection, id), hero);
       }
       await batch.commit();
+      snapshot = await getDocs(heroCollection);
+    }
 
-      const seededSnapshot = await getDocs(heroCollection);
-      return seededSnapshot.docs.map(document =>
-        toHeroDocument(document.id, document.data())
-      );
+    const documentsWithoutValidRank = snapshot.docs.filter(
+      document => !isHeroRank(document.data()['rang'])
+    );
+
+    if (documentsWithoutValidRank.length > 0) {
+      const batch = writeBatch(this.firestore);
+      for (const document of documentsWithoutValidRank) {
+        batch.update(document.ref, { rang: 'C' satisfies HeroRank });
+      }
+      await batch.commit();
+      snapshot = await getDocs(heroCollection);
     }
 
     return snapshot.docs.map(document => toHeroDocument(document.id, document.data()));

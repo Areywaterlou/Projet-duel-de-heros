@@ -25,7 +25,6 @@ export const appConfig: ApplicationConfig = {
       useFactory: getFirestore,
       deps: [FIREBASE_APP]
     }
-  ]
   ],
 };
  
