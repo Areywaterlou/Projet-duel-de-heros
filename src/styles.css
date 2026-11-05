@@ -1,1 +1,198 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  color-scheme: light;
+  --bg: #f4f7fa;
+  --surface: rgba(255, 255, 255, 0.78);
+  --ink: #1b2733;
+  --muted: #6b7a89;
+  --line: #d5dee7;
+  --accent: #19c3d6;
+  --accent-strong: #0a8fa0;
+  --rank-s: #e0a526;
+  --rank-a: #8e5bd6;
+  --rank-b: #3b82d6;
+  --rank-c: #3fae7a;
+  --rank-d: #8793a0;
+  --danger: #c94b57;
+  --shadow-soft: 0 12px 36px rgb(34 58 76 / 7%);
+  --cut-corner: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(135deg, rgb(41 111 135 / 3%) 1px, transparent 1px),
+    linear-gradient(45deg, rgb(41 111 135 / 2%) 1px, transparent 1px);
+  background-size: 32px 32px, 48px 48px;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--accent-strong);
+  outline-offset: 3px;
+}
+
+.cut-corners {
+  clip-path: var(--cut-corner);
+}
+
+.eyebrow,
+h1,
+h2,
+h3,
+label,
+button,
+.rank-badge,
+.rank-mark {
+  font-family: 'Rajdhani', 'Arial Narrow', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+h2 {
+  align-items: center;
+  display: flex;
+  gap: 0.8rem;
+  margin: 0 0 1.5rem;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+}
+
+h2::before {
+  background: var(--accent);
+  box-shadow: 6px 0 0 rgb(25 195 214 / 35%);
+  content: '';
+  height: 1.2rem;
+  transform: skew(-24deg);
+  width: 4px;
+}
+
+.surface-panel {
+  background: var(--surface);
+  border: 1px solid rgb(213 222 231 / 85%);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+  clip-path: var(--cut-corner);
+}
+
+.button-primary,
+.button-secondary,
+.button-danger {
+  align-items: center;
+  border: 1px solid transparent;
+  clip-path: var(--cut-corner);
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.7rem 1.25rem;
+  text-decoration: none;
+  transition: transform 180ms ease, filter 180ms ease, background-color 180ms ease;
+}
+
+.button-primary {
+  background: linear-gradient(115deg, #39d6e2, var(--accent));
+  color: #07333a;
+  box-shadow: 0 6px 16px rgb(25 195 214 / 18%);
+}
+
+.button-primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-2px);
+}
+
+.button-secondary {
+  background: rgb(255 255 255 / 58%);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.button-secondary:hover:not(:disabled) {
+  background: white;
+  transform: translateY(-1px);
+}
+
+.button-danger {
+  background: #fff1f1;
+  border-color: #efc7c9;
+  color: #8f2733;
+}
+
+.button-danger:hover:not(:disabled) {
+  background: #ffe4e5;
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.35);
+  opacity: 0.65;
+}
+
+.status-message {
+  background: rgb(255 255 255 / 75%);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  clip-path: var(--cut-corner);
+  padding: 1rem 1.2rem;
+}
+
+.status-message.error {
+  background: #fff3f2;
+  border-color: #edc3c0;
+  color: #8c3235;
+}
+
+.field-error {
+  color: #a9373e;
+  font-size: 0.9rem;
+  margin: -0.5rem 0 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

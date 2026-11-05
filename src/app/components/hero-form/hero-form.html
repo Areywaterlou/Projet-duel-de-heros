@@ -1,9 +1,10 @@
 <section class="form-page">
+  <p class="eyebrow">Nouvelle entrée · Archives</p>
   <h2>Ajouter un héros</h2>
-  <form (submit)="soumettre($event)" novalidate>
+  <form class="surface-panel hero-form" (submit)="soumettre($event)" novalidate>
     <label>
       Nom
-      <input type="text" [formField]="formulaire.nom" autocomplete="off">
+      <input type="text" [formField]="formulaire.nom" autocomplete="off" placeholder="Nom du héros">
     </label>
     @if (formulaire.nom().touched() && formulaire.nom().invalid()) {
       <p class="field-error">Saisissez un nom valide de 1 à 60 caractères.</p>
@@ -11,7 +12,7 @@
 
     <label>
       Points de vie
-      <input type="number" [formField]="formulaire.pointsDeVie">
+      <input type="number" [formField]="formulaire.pointsDeVie" placeholder="Ex. 850">
     </label>
     @if (formulaire.pointsDeVie().touched() && formulaire.pointsDeVie().invalid()) {
       <p class="field-error">Entrez un nombre de points de vie supérieur à zéro.</p>
@@ -19,7 +20,7 @@
 
     <label>
       Attaque
-      <input type="number" [formField]="formulaire.attaque">
+      <input type="number" [formField]="formulaire.attaque" placeholder="Ex. 72">
     </label>
     @if (formulaire.attaque().touched() && formulaire.attaque().invalid()) {
       <p class="field-error">L’attaque doit être un nombre positif ou nul.</p>
@@ -27,7 +28,7 @@
 
     <label>
       Défense
-      <input type="number" [formField]="formulaire.defense">
+      <input type="number" [formField]="formulaire.defense" placeholder="Ex. 45">
     </label>
     @if (formulaire.defense().touched() && formulaire.defense().invalid()) {
       <p class="field-error">La défense doit être un nombre positif ou nul.</p>
@@ -64,7 +65,7 @@
       <p class="form-error" role="alert">{{ erreur() }}</p>
     }
 
-    <button type="submit" [disabled]="enregistrement()">
+    <button class="button-primary" type="submit" [disabled]="enregistrement()">
       {{ enregistrement() ? 'Enregistrement...' : 'Enregistrer le héros' }}
     </button>
   </form>

@@ -1,8 +1,16 @@
-<h1>Tour of Heroes</h1>
+@if (!isAccueil()) {
+  <header class="site-header">
+    <a class="brand" routerLink="/" aria-label="Tour of Heroes — accueil">
+      <span class="brand-mark" aria-hidden="true">◇</span>
+      <h1>Tour of Heroes</h1>
+    </a>
+    <nav aria-label="Navigation principale">
+      <a routerLink="/tier-list" routerLinkActive="active">Tier List</a>
+      <a routerLink="/ajouter" routerLinkActive="active">Ajouter un héros</a>
+    </nav>
+  </header>
+}
 
-<nav aria-label="Navigation principale">
-  <a routerLink="/tier-list" routerLinkActive="active">Tier List</a>
-  <a routerLink="/ajouter" routerLinkActive="active">Ajouter un héros</a>
-</nav>
-
-<router-outlet />
+<main class="route-content" [class.is-home]="isAccueil()">
+  <router-outlet />
+</main>
