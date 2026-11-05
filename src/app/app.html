@@ -1,3 +1,19 @@
-<h1>{{ title() }}</h1>
-<app-heroes-component></app-heroes-component>
-<app-messages></app-messages>
+<header class="app-header">
+  <h1>Duel de Héros</h1>
+  <nav aria-label="Navigation principale">
+    <a routerLink="/tier-list" routerLinkActive="active">
+      Tier List
+    </a>
+    <a
+      routerLink="/ajouter"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Ajouter un héros
+    </a>
+  </nav>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
