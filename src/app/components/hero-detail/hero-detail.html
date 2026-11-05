@@ -2,14 +2,19 @@
   <a class="back-link" routerLink="/tier-list">← Retour à la Tier List</a>
 
   @if (hero.isLoading()) {
-    <p>Chargement des détails...</p>
+    <p class="status-message" role="status">Chargement des détails...</p>
   } @else if (messageErreurChargement()) {
-    <p class="error" role="alert">{{ messageErreurChargement() }}</p>
+    <p class="status-message error" role="alert">{{ messageErreurChargement() }}</p>
   } @else if (hero.value(); as detail) {
-    <article>
+    <article class="surface-panel detail-card">
       <header>
-        <h2>{{ detail.nom }}</h2>
-        <span class="rank-badge">Rang {{ detail.rang }}</span>
+        <div>
+          <p class="eyebrow">Fiche d'archive · {{ detail.classe }}</p>
+          <h2>{{ detail.nom }}</h2>
+        </div>
+        <span class="rank-badge rank-{{ detail.rang.toLowerCase() }}" aria-label="Rang {{ detail.rang }}">
+          <span>{{ detail.rang }}</span>
+        </span>
       </header>
 
       <form (submit)="enregistrer($event)" novalidate>
@@ -80,12 +85,12 @@
         }
 
         <div class="actions">
-          <button type="submit" [disabled]="enregistrement() || suppression()">
+          <button class="button-primary" type="submit" [disabled]="enregistrement() || suppression()">
             {{ enregistrement() ? 'Enregistrement...' : 'Enregistrer les modifications' }}
           </button>
           <button
             type="button"
-            class="delete-button"
+            class="button-danger"
             (click)="supprimer()"
             [disabled]="enregistrement() || suppression()"
           >

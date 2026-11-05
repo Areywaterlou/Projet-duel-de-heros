@@ -1,0 +1,22 @@
+<section class="landing" [class.leaving]="leaving()" aria-labelledby="landing-title">
+  <div class="frequency frequency-one" aria-hidden="true"></div>
+  <div class="frequency frequency-two" aria-hidden="true"></div>
+  <div class="frequency frequency-three" aria-hidden="true"></div>
+  <div class="landing-content">
+    <p class="eyebrow">Archives d'aventuriers · Édition 01</p>
+    <h1 id="landing-title">Tour of <span>Heroes</span></h1>
+    <p class="subtitle">Découvrez les héros. Mesurez leur légende.</p>
+    <button class="play-button cut-corners" type="button" (click)="commencer()" [disabled]="leaving()">
+      <span>Jouer</span>
+      <span class="button-arrow" aria-hidden="true">↗</span>
+    </button>
+    <p class="landing-footnote">Collection · Classement · Archives</p>
+  </div>
+  @if (leaving()) {
+    <div
+      class="transition-sweep"
+      aria-hidden="true"
+      (animationend)="terminerTransition($event)"
+    ></div>
+  }
+</section>

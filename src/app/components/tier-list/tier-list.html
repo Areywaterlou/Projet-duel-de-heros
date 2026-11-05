@@ -1,31 +1,46 @@
 <section class="tier-list">
-  <h2>Tier List des héros</h2>
+  <div class="page-heading">
+    <p class="eyebrow">Archives · Classement</p>
+    <h2>Tier List des héros</h2>
+  </div>
 
   @if (heros.isLoading()) {
-    <p>Chargement des héros...</p>
+    <p class="status-message" role="status">Synchronisation des archives...</p>
   } @else if (heros.error()) {
-    <p class="error" role="alert">Impossible de charger les héros depuis Firestore.</p>
+    <p class="status-message error" role="alert">Impossible de charger les héros depuis Firestore.</p>
   } @else {
     @for (groupe of groupes(); track groupe.rang) {
-      <section class="rank-row" [class]="'rank-row rank-' + groupe.rang.toLowerCase()">
-        <h3>{{ groupe.nom }}</h3>
+      <section
+        class="rank-row surface-panel"
+        [class.rank-s]="groupe.rang === 'S'"
+        [class.rank-a]="groupe.rang === 'A'"
+        [class.rank-b]="groupe.rang === 'B'"
+        [class.rank-c]="groupe.rang === 'C'"
+        [class.rank-d]="groupe.rang === 'D'"
+      >
+        <div class="rank-heading">
+          <span class="rank-mark" aria-hidden="true"><span>{{ groupe.rang }}</span></span>
+          <h3>{{ groupe.nom }}</h3>
+          <span class="rank-count">{{ groupe.heros.length }} héros</span>
+        </div>
         @if (groupe.heros.length > 0) {
-          <ul>
-            @for (hero of groupe.heros; track hero.id) {
-              <li>
-                <a [routerLink]="['/heros', hero.id]">{{ hero.nom }}</a>
-                <span>{{ hero.classe }}</span>
-                <span>PV {{ hero.pointsDeVie }}</span>
-                <span>Attaque {{ hero.attaque }}</span>
-                <span>Défense {{ hero.defense }}</span>
+          <ul class="hero-grid">
+            @for (hero of groupe.heros; track hero.id; let index = $index) {
+              <li class="hero-card cut-corners" [style.--card-index]="index">
+                <a class="hero-name" [routerLink]="['/heros', hero.id]">{{ hero.nom }}</a>
+                <span class="hero-class">{{ hero.classe }}</span>
+                <div class="hero-stats" aria-label="Caractéristiques">
+                  <span class="stat-chip"><b>PV</b>{{ hero.pointsDeVie }}</span>
+                  <span class="stat-chip"><b>ATK</b>{{ hero.attaque }}</span>
+                  <span class="stat-chip"><b>DEF</b>{{ hero.defense }}</span>
+                </div>
               </li>
             }
           </ul>
         } @else {
-          <p class="empty">Aucun héros dans ce rang.</p>
+          <p class="empty">Aucun héros dans ce rang</p>
         }
       </section>
     }
-
   }
 </section>

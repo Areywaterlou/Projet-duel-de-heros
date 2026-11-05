@@ -1,7 +1,11 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'tier-list' },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./components/accueil/accueil').then(module => module.AccueilComponent)
+  },
   {
     path: 'tier-list',
     loadComponent: () =>
@@ -17,5 +21,5 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/hero-detail/hero-detail').then(module => module.HeroDetailPageComponent)
   },
-  { path: '**', redirectTo: 'tier-list' }
+  { path: '**', redirectTo: '' }
 ];
