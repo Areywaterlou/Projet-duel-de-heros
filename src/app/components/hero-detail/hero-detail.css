@@ -20,6 +20,7 @@ article header {
   display: flex;
   gap: 1rem;
   justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 article h2 {
@@ -57,6 +58,46 @@ dd {
   margin: 0.25rem 0 0;
 }
 
-.error {
+.hero-detail form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.hero-detail label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.hero-detail input,
+.hero-detail select,
+.hero-detail button {
+  box-sizing: border-box;
+  font: inherit;
+  min-height: 2.5rem;
+  padding: 0.45rem 0.6rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.actions button {
+  cursor: pointer;
+}
+
+.delete-button {
+  background: #a32222;
+  color: #fff;
+}
+
+.error,
+.field-error {
   color: #a32222;
+}
+
+.success {
+  color: #166534;
 }

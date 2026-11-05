@@ -1,19 +1,17 @@
 import { Injectable, inject } from '@angular/core';
-import type { FirebaseApp } from 'firebase/app';
-import type { Auth } from 'firebase/auth';
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
   type DocumentData,
-  type Firestore,
+  updateDoc,
   writeBatch
 } from 'firebase/firestore';
-import { FIREBASE_APP, FIREBASE_AUTH, FIRESTORE } from '../firebase.config';
-import type { Hero, HeroDocument, HeroRank } from '../data/hero';
-import { DEMO_HEROES } from '../data/demo-heroes';
+import { FIRESTORE } from '../firebase.config';
+import type { Hero, HeroFormValue, HeroRank } from '../data/hero';
 
 const HERO_RANKS: readonly HeroRank[] = ['S', 'A', 'B', 'C', 'D'];
 
@@ -21,7 +19,7 @@ function isHeroRank(value: unknown): value is HeroRank {
   return typeof value === 'string' && HERO_RANKS.some(rank => rank === value);
 }
 
-function toHeroDocument(id: string, data: DocumentData): HeroDocument {
+function toHero(id: string, data: DocumentData): Hero {
   if (
     typeof data['nom'] !== 'string' ||
     typeof data['pointsDeVie'] !== 'number' ||
@@ -39,7 +37,7 @@ function toHeroDocument(id: string, data: DocumentData): HeroDocument {
     attaque: data['attaque'],
     defense: data['defense'],
     classe: data['classe'],
-    rang: isHeroRank(data['rang']) ? data['rang'] : undefined
+    rang: isHeroRank(data['rang']) ? data['rang'] : 'C'
   };
 }
 
@@ -47,51 +45,51 @@ function toHeroDocument(id: string, data: DocumentData): HeroDocument {
   providedIn: 'root'
 })
 export class FirebaseService {
-  readonly app: FirebaseApp = inject(FIREBASE_APP);
-  readonly auth: Auth = inject(FIREBASE_AUTH);
-  readonly firestore: Firestore = inject(FIRESTORE);
+  private readonly firestore = inject(FIRESTORE);
 
-  async ajouterHero(hero: Hero): Promise<string> {
-    const document = await addDoc(collection(this.firestore, 'heros'), hero);
+  async ajouterHero(hero: HeroFormValue): Promise<string> {
+    const firestore = await this.firestore;
+    const document = await addDoc(collection(firestore, 'heros'), hero);
     return document.id;
   }
 
-  async obtenirHeros(): Promise<HeroDocument[]> {
-    const snapshot = await getDocs(collection(this.firestore, 'heros'));
-    return snapshot.docs.map(document => toHeroDocument(document.id, document.data()));
-  }
-
-  async initialiserHerosSiVide(): Promise<HeroDocument[]> {
-    const heroCollection = collection(this.firestore, 'heros');
+  async obtenirHeros(): Promise<Hero[]> {
+    const firestore = await this.firestore;
+    const heroCollection = collection(firestore, 'heros');
     let snapshot = await getDocs(heroCollection);
-
-    if (snapshot.empty) {
-      const batch = writeBatch(this.firestore);
-      for (const { id, hero } of DEMO_HEROES) {
-        batch.set(doc(heroCollection, id), hero);
-      }
-      await batch.commit();
-      snapshot = await getDocs(heroCollection);
-    }
 
     const documentsWithoutValidRank = snapshot.docs.filter(
       document => !isHeroRank(document.data()['rang'])
     );
 
     if (documentsWithoutValidRank.length > 0) {
-      const batch = writeBatch(this.firestore);
-      for (const document of documentsWithoutValidRank) {
-        batch.update(document.ref, { rang: 'C' satisfies HeroRank });
+      for (let index = 0; index < documentsWithoutValidRank.length; index += 500) {
+        const batch = writeBatch(firestore);
+        const batchDocuments = documentsWithoutValidRank.slice(index, index + 500);
+        for (const document of batchDocuments) {
+          batch.update(document.ref, { rang: 'C' });
+        }
+        await batch.commit();
       }
-      await batch.commit();
       snapshot = await getDocs(heroCollection);
     }
 
-    return snapshot.docs.map(document => toHeroDocument(document.id, document.data()));
+    return snapshot.docs.map(document => toHero(document.id, document.data()));
   }
 
-  async obtenirHero(id: string): Promise<HeroDocument | null> {
-    const snapshot = await getDoc(doc(this.firestore, 'heros', id));
-    return snapshot.exists() ? toHeroDocument(snapshot.id, snapshot.data()) : null;
+  async obtenirHero(id: string): Promise<Hero | null> {
+    const firestore = await this.firestore;
+    const snapshot = await getDoc(doc(firestore, 'heros', id));
+    return snapshot.exists() ? toHero(snapshot.id, snapshot.data()) : null;
+  }
+
+  async modifierHero(id: string, hero: HeroFormValue): Promise<void> {
+    const firestore = await this.firestore;
+    await updateDoc(doc(firestore, 'heros', id), hero);
+  }
+
+  async supprimerHero(id: string): Promise<void> {
+    const firestore = await this.firestore;
+    await deleteDoc(doc(firestore, 'heros', id));
   }
 }

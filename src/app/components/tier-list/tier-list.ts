@@ -1,6 +1,6 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, resource } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { HeroDocument, HeroRank } from '../../data/hero';
+import type { HeroRank } from '../../data/hero';
 import { FirebaseService } from '../../services/firebase.service';
 
 const RANKS: { rang: HeroRank; nom: string }[] = [
@@ -13,44 +13,23 @@ const RANKS: { rang: HeroRank; nom: string }[] = [
 
 @Component({
   selector: 'app-tier-list',
-  standalone: true,
   imports: [RouterLink],
   templateUrl: './tier-list.html',
-  styleUrl: './tier-list.css'
+  styleUrl: './tier-list.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TierListComponent implements OnInit {
+export class TierListComponent {
   private readonly firebaseService = inject(FirebaseService);
 
   protected readonly ranks = RANKS;
-  protected readonly heros = signal<HeroDocument[]>([]);
-  protected readonly chargement = signal(true);
-  protected readonly erreur = signal('');
+  protected readonly heros = resource({
+    loader: () => this.firebaseService.obtenirHeros()
+  });
 
   protected readonly groupes = computed(() =>
     this.ranks.map(rank => ({
       ...rank,
-      heros: this.heros().filter(hero => hero.rang === rank.rang)
+      heros: (this.heros.value() ?? []).filter(hero => hero.rang === rank.rang)
     }))
   );
-  protected readonly herosSansRang = computed(() =>
-    this.heros().filter(hero => !hero.rang || !this.ranks.some(rank => rank.rang === hero.rang))
-  );
-
-  ngOnInit(): void {
-    void this.chargerHeros();
-  }
-
-  private async chargerHeros(): Promise<void> {
-    this.chargement.set(true);
-    this.erreur.set('');
-
-    try {
-      this.heros.set(await this.firebaseService.initialiserHerosSiVide());
-    } catch (error) {
-      console.error('Erreur lors du chargement des héros :', error);
-      this.erreur.set('Impossible de charger les héros depuis Firestore.');
-    } finally {
-      this.chargement.set(false);
-    }
-  }
 }

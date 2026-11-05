@@ -1,55 +1,68 @@
-import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { FormField, form, maxLength, min, required } from '@angular/forms/signals';
 import { Router } from '@angular/router';
-import type { Hero, HeroRank } from '../../data/hero';
+import type { HeroFormValue } from '../../data/hero';
 import { FirebaseService } from '../../services/firebase.service';
 
 @Component({
   selector: 'app-hero-form',
-  standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [FormField],
   templateUrl: './hero-form.html',
-  styleUrl: './hero-form.css'
+  styleUrl: './hero-form.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeroFormComponent {
-  private readonly formBuilder = inject(FormBuilder);
   private readonly firebaseService = inject(FirebaseService);
   private readonly router = inject(Router);
 
   protected readonly enregistrement = signal(false);
   protected readonly erreur = signal('');
 
-  protected readonly formulaire = this.formBuilder.nonNullable.group({
-    nom: ['', [Validators.required, Validators.maxLength(60)]],
-    pointsDeVie: [0, [Validators.required, Validators.min(1)]],
-    attaque: [0, [Validators.required, Validators.min(0)]],
-    defense: [0, [Validators.required, Validators.min(0)]],
-    classe: ['', [Validators.required, Validators.maxLength(40)]],
-    rang: ['C' as HeroRank, Validators.required]
+  protected readonly model = signal<HeroFormValue>({
+    nom: '',
+    pointsDeVie: 1,
+    attaque: 0,
+    defense: 0,
+    classe: '',
+    rang: 'C'
   });
 
-  protected async soumettre(): Promise<void> {
+  protected readonly formulaire = form(this.model, path => {
+    required(path.nom);
+    maxLength(path.nom, 60);
+    required(path.pointsDeVie);
+    min(path.pointsDeVie, 1);
+    required(path.attaque);
+    min(path.attaque, 0);
+    required(path.defense);
+    min(path.defense, 0);
+    required(path.classe);
+    maxLength(path.classe, 40);
+    required(path.rang);
+  });
+
+  protected async soumettre(event: SubmitEvent): Promise<void> {
+    event.preventDefault();
     this.erreur.set('');
 
-    if (this.formulaire.invalid) {
-      this.formulaire.markAllAsTouched();
+    this.formulaire().markAsTouched();
+    if (!this.formulaire().valid()) {
       return;
     }
 
     this.enregistrement.set(true);
-    const hero: Hero = this.formulaire.getRawValue();
 
     try {
-      await this.firebaseService.ajouterHero(hero);
-      this.formulaire.reset({
+      const id = await this.firebaseService.ajouterHero(this.model());
+      this.model.set({
         nom: '',
-        pointsDeVie: 0,
+        pointsDeVie: 1,
         attaque: 0,
         defense: 0,
         classe: '',
         rang: 'C'
       });
-      await this.router.navigateByUrl('/tier-list');
+      await this.router.navigate(['/heros', id]);
     } catch (error) {
       console.error('Erreur lors de l’enregistrement du héros :', error);
       this.erreur.set('L’enregistrement a échoué. Vérifiez votre connexion et les règles Firestore.');

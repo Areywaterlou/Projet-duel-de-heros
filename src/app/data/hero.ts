@@ -1,6 +1,7 @@
 export type HeroRank = 'S' | 'A' | 'B' | 'C' | 'D';
 
 export interface Hero {
+  id: string;
   nom: string;
   pointsDeVie: number;
   attaque: number;
@@ -9,7 +10,4 @@ export interface Hero {
   rang: HeroRank;
 }
 
-export interface HeroDocument extends Omit<Hero, 'rang'> {
-  id: string;
-  rang?: HeroRank;
-}
+export type HeroFormValue = Omit<Hero, 'id'>;

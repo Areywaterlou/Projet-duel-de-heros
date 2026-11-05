@@ -1,39 +1,98 @@
 <section class="hero-detail">
   <a class="back-link" routerLink="/tier-list">← Retour à la Tier List</a>
 
-  @if (chargement()) {
+  @if (hero.isLoading()) {
     <p>Chargement des détails...</p>
-  } @else if (erreur()) {
-    <p class="error" role="alert">{{ erreur() }}</p>
-  } @else if (hero(); as detail) {
+  } @else if (messageErreurChargement()) {
+    <p class="error" role="alert">{{ messageErreurChargement() }}</p>
+  } @else if (hero.value(); as detail) {
     <article>
       <header>
         <h2>{{ detail.nom }}</h2>
-        <span class="rank-badge">{{ detail.rang ?? 'Sans rang' }}</span>
+        <span class="rank-badge">Rang {{ detail.rang }}</span>
       </header>
 
-      <dl>
-        <div>
-          <dt>Classe</dt>
-          <dd>{{ detail.classe }}</dd>
+      <form (submit)="enregistrer($event)" novalidate>
+        <label>
+          Nom
+          <input type="text" [formField]="formulaire.nom" autocomplete="off">
+        </label>
+        @if (formulaire.nom().touched() && formulaire.nom().invalid()) {
+          <p class="field-error">Saisissez un nom valide de 1 à 60 caractères.</p>
+        }
+
+        <label>
+          Classe
+          <select [formField]="formulaire.classe">
+            <option value="">Choisir une classe</option>
+            <option value="Guerrier">Guerrier</option>
+            <option value="Mage">Mage</option>
+            <option value="Archer">Archer</option>
+            <option value="Voleur">Voleur</option>
+            <option value="Soigneur">Soigneur</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </label>
+        @if (formulaire.classe().touched() && formulaire.classe().invalid()) {
+          <p class="field-error">Choisissez une classe.</p>
+        }
+
+        <label>
+          Points de vie
+          <input type="number" [formField]="formulaire.pointsDeVie">
+        </label>
+        @if (formulaire.pointsDeVie().touched() && formulaire.pointsDeVie().invalid()) {
+          <p class="field-error">Les points de vie doivent être supérieurs à zéro.</p>
+        }
+
+        <label>
+          Attaque
+          <input type="number" [formField]="formulaire.attaque">
+        </label>
+        @if (formulaire.attaque().touched() && formulaire.attaque().invalid()) {
+          <p class="field-error">L’attaque doit être positive ou nulle.</p>
+        }
+
+        <label>
+          Défense
+          <input type="number" [formField]="formulaire.defense">
+        </label>
+        @if (formulaire.defense().touched() && formulaire.defense().invalid()) {
+          <p class="field-error">La défense doit être positive ou nulle.</p>
+        }
+
+        <label>
+          Rang
+          <select [formField]="formulaire.rang">
+            <option value="S">S</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+        </label>
+
+        @if (erreur()) {
+          <p class="error" role="alert">{{ erreur() }}</p>
+        }
+        @if (succes()) {
+          <p class="success" role="status">{{ succes() }}</p>
+        }
+
+        <div class="actions">
+          <button type="submit" [disabled]="enregistrement() || suppression()">
+            {{ enregistrement() ? 'Enregistrement...' : 'Enregistrer les modifications' }}
+          </button>
+          <button
+            type="button"
+            class="delete-button"
+            (click)="supprimer()"
+            [disabled]="enregistrement() || suppression()"
+          >
+            {{ suppression() ? 'Suppression...' : 'Supprimer le héros' }}
+          </button>
         </div>
-        <div>
-          <dt>Points de vie</dt>
-          <dd>{{ detail.pointsDeVie }}</dd>
-        </div>
-        <div>
-          <dt>Attaque</dt>
-          <dd>{{ detail.attaque }}</dd>
-        </div>
-        <div>
-          <dt>Défense</dt>
-          <dd>{{ detail.defense }}</dd>
-        </div>
-        <div>
-          <dt>Rang</dt>
-          <dd>{{ detail.rang ?? 'Sans rang' }}</dd>
-        </div>
-      </dl>
+      </form>
     </article>
   }
 </section>
