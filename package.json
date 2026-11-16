@@ -2,15 +2,20 @@
   "name": "reymonar-ToH2026",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "start": "ng serve",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "seed:heroes": "node scripts/seed-firestore.js",
+    "seed:weapons": "node scripts/seed-weapons.js",
+    "migrate:heroes": "node scripts/migrate-heroes.js",
+    "test": "ng test --watch=false"
   },
   "private": true,
   "devDependencies": {
     "@angular/cli": "^22.2.2",
-    "angular-cli-ghpages": "^3.1.2"
+    "angular-cli-ghpages": "^3.1.2",
+    "firebase-admin": "^14.5.1",
+    "jsdom": "^31.0.1",
+    "vitest": "^5.1.0"
   },
   "dependencies": {
     "@angular/build": "^22.2.2",

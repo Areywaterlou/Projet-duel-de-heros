@@ -1,0 +1,69 @@
+<section class="duel-page surface-panel">
+  <header class="page-heading">
+    <p class="eyebrow">Arène</p>
+    <h2>Duel des héros</h2>
+  </header>
+
+  @if (!combat()) {
+    <div class="duel-settings">
+      <label>
+        Votre héros
+        <select [value]="premierId()" (change)="choisirPremier($event)">
+          <option value="">Choisir un héros</option>
+          @for (hero of heros() ?? []; track hero.id) {
+            <option [value]="hero.id">{{ hero.nom }}</option>
+          }
+        </select>
+      </label>
+      <span class="versus" aria-hidden="true">VS</span>
+      <div class="opponent-choice">
+        <span>Adversaire</span>
+        <strong>{{ secondId() ? nomHero(secondId()) : 'Aucun adversaire choisi' }}</strong>
+        @if (secondId()) {
+          <button class="button-secondary" type="button" (click)="retirerAdversaire()">Retirer</button>
+        }
+      </div>
+      <button class="button-primary" type="button" [disabled]="!combatPret()" (click)="lancerDuel()">Commencer</button>
+    </div>
+    @if (adversaireInfo()) { <p class="status-message">{{ adversaireInfo() }}</p> }
+    @if (heros()?.length === 0) {
+      <p class="empty-state">Ajoute des héros pour commencer un duel.</p>
+    }
+  } @else {
+    <div class="arena">
+      @for (fighter of fighters(); track fighter.hero.id; let index = $index) {
+        <app-hero-jeu
+          [fighter]="fighter"
+          [armes]="armes() ?? []"
+          [active]="!termine() && index === 0"
+          [defeated]="fighter.pvActuels <= 0"
+        />
+      }
+    </div>
+    <section class="arena-center" aria-live="polite">
+      @if (termine()) {
+        <p class="winner">{{ vainqueurNom() === 'Égalité' ? 'Match nul' : vainqueurNom() + ' remporte le duel' }}</p>
+      } @else {
+        <p class="turn-prompt">À vous d’attaquer</p>
+      }
+      <p>{{ combat()?.tours }} tours</p>
+      @if (!termine()) {
+        <div class="combat-actions">
+          <button class="button-primary" type="button" (click)="attaquer()">Attaquer</button>
+          <button class="button-secondary" type="button" (click)="auto()">Auto</button>
+        </div>
+      } @else {
+        <div class="combat-actions">
+          <button class="button-primary" type="button" (click)="rejouer()">Rejouer</button>
+          <a class="button-secondary" routerLink="/dashboard">Retour au dashboard</a>
+        </div>
+      }
+    </section>
+    <ol class="combat-log" aria-label="Journal du combat" aria-live="polite">
+      @for (action of actionsRecentes(); track $index) {
+        <li>{{ descriptionAction(action) }}</li>
+      }
+    </ol>
+  }
+  @if (erreur()) { <p class="status-message error" role="alert">{{ erreur() }}</p> }
+</section>

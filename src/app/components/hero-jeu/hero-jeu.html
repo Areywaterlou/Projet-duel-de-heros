@@ -1,0 +1,40 @@
+<article class="fighter" [class.active]="active()" [class.defeated]="defeated()">
+  <header>
+    <span class="rank"><span>{{ hero().rang }}</span></span>
+    <div>
+      <p class="eyebrow">{{ hero().classe ?? 'Arme à définir' }} - {{ hero().archetype }}</p>
+      <h2>{{ hero().nom }}</h2>
+    </div>
+    @if (active()) {
+      <span class="turn-indicator">À vous</span>
+    }
+  </header>
+
+  <div class="health-label">
+    <span>PV</span>
+    <strong>{{ fighter().pvActuels }} / {{ fighter().pvMax }}</strong>
+  </div>
+  <progress [max]="fighter().pvMax" [value]="fighter().pvActuels"
+            [attr.aria-label]="'Points de vie de ' + hero().nom"></progress>
+
+  <dl class="stats">
+    @for (stat of stats; track stat) {
+      @let breakdown = detailStat(stat);
+      <div>
+        <dt>{{ stat }}</dt>
+        <dd>{{ breakdown.base }}
+          @if (breakdown.arme) { <span class="bonus" title="Bonus d’arme">+{{ breakdown.arme }}</span> }
+          @if (breakdown.talent) { <span class="bonus" title="Bonus de talent">+{{ breakdown.talent }}</span> }
+          @if (breakdown.archetype) { <span class="bonus" title="Bonus d’archétype">+{{ breakdown.archetype }}</span> }
+        </dd>
+      </div>
+    }
+  </dl>
+  @if (hero().talents.length) {
+    <p class="talent">
+      @for (talent of hero().talents; track $index) {
+        <span>{{ talent.stat }} +{{ talent.valeur }}</span>
+      }
+    </p>
+  }
+</article>

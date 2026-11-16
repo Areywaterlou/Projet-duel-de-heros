@@ -1,5 +1,5 @@
 <section class="form-page">
-  <p class="eyebrow">Nouvelle entrée · Archives</p>
+  <p class="eyebrow">Nouvelle entrée</p>
   <h2>Ajouter un héros</h2>
   <form class="surface-panel hero-form" (submit)="soumettre($event)" novalidate>
     <label>
@@ -11,61 +11,84 @@
     }
 
     <label>
-      Points de vie
-      <input type="number" [formField]="formulaire.pointsDeVie" placeholder="Ex. 850">
+      Archétype
+      <select [formField]="formulaire.archetype">
+        @for (archetype of archetypes; track archetype) {
+          <option [value]="archetype">{{ archetype }}</option>
+        }
+      </select>
     </label>
-    @if (formulaire.pointsDeVie().touched() && formulaire.pointsDeVie().invalid()) {
-      <p class="field-error">Entrez un nombre de points de vie supérieur à zéro.</p>
-    }
 
     <label>
-      Attaque
-      <input type="number" [formField]="formulaire.attaque" placeholder="Ex. 72">
-    </label>
-    @if (formulaire.attaque().touched() && formulaire.attaque().invalid()) {
-      <p class="field-error">L’attaque doit être un nombre positif ou nul.</p>
-    }
-
-    <label>
-      Défense
-      <input type="number" [formField]="formulaire.defense" placeholder="Ex. 45">
-    </label>
-    @if (formulaire.defense().touched() && formulaire.defense().invalid()) {
-      <p class="field-error">La défense doit être un nombre positif ou nul.</p>
-    }
-
-    <label>
-      Classe
+      Classe d’arme
       <select [formField]="formulaire.classe">
         <option value="">Choisir une classe</option>
-        <option value="Guerrier">Guerrier</option>
-        <option value="Mage">Mage</option>
-        <option value="Archer">Archer</option>
-        <option value="Voleur">Voleur</option>
-        <option value="Soigneur">Soigneur</option>
-        <option value="Autre">Autre</option>
+        @for (type of typesArme; track type) {
+          <option [value]="type">{{ type }}</option>
+        }
       </select>
     </label>
-    @if (formulaire.classe().touched() && formulaire.classe().invalid()) {
-      <p class="field-error">Choisissez une classe.</p>
+    <output class="role-preview">{{ model().classe || 'Arme à définir' }} - {{ model().archetype }}</output>
+
+    <div class="points-remaining" role="status">
+      <span>{{ rang() }} · {{ totalPoints() }} points</span>
+      <span>{{ pointsRestants() }} restants</span>
+    </div>
+
+    <div class="stat-fields">
+      @for (stat of stats; track stat) {
+        <div class="stat-counter">
+          <div class="counter-heading">
+            <label [for]="'hero-' + stat">{{ statLabels[stat] }}</label>
+            <output [id]="'hero-' + stat">{{ model()[stat] }}</output>
+          </div>
+          <progress [max]="20" [value]="model()[stat]"></progress>
+          <div class="counter-buttons">
+            <button type="button" class="button-secondary" (click)="changerStat(stat, -1)" [disabled]="model()[stat] <= 1">−</button>
+            <button type="button" class="button-secondary" (click)="changerStat(stat, 1)" [disabled]="model()[stat] >= 20">+</button>
+          </div>
+        </div>
+      }
+    </div>
+    @if (formulaire().touched() && formulaire().invalid()) {
+      <p class="field-error" role="alert">Répartissez de 10 à 40 points, avec 1 à 20 points par caractéristique.</p>
     }
 
     <label>
-      Rang
-      <select [formField]="formulaire.rang">
-        <option value="S">S</option>
-        <option value="A">A</option>
-        <option value="B">B</option>
-        <option value="C">C</option>
-        <option value="D">D</option>
+      Filtrer les armes par classe
+      <select [value]="filtreTypeArme()" (change)="changerFiltreType($event)">
+        <option value="">Tous les types</option>
+        @for (type of typesArme; track type) {
+          <option [value]="type">{{ type }}</option>
+        }
+      </select>
+    </label>
+    <label>
+      Arme équipée (facultative)
+      <select [formField]="formulaire.armeId">
+        <option value="">Aucune arme</option>
+        @for (arme of armesFiltrees(); track arme.id) {
+          <option [value]="arme.id">{{ arme.nom }} · {{ arme.type }} · {{ arme.rarete }}★</option>
+        }
       </select>
     </label>
 
+    <section class="critical-roll" aria-live="polite">
+      <h3>Critiques</h3>
+      @if (critiques(); as result) {
+        <p>{{ result.tauxCritique }} % · {{ result.degatsCritiques }} %</p>
+      } @else {
+        <button type="button" class="button-secondary" (click)="tirerCritiquesUneFois()">Tirer mes critiques</button>
+      }
+    </section>
+
+    @if (erreurArmes()) {
+      <p class="field-error" role="alert">Impossible de charger les armes.</p>
+    }
     @if (erreur()) {
       <p class="form-error" role="alert">{{ erreur() }}</p>
     }
-
-    <button class="button-primary" type="submit" [disabled]="enregistrement()">
+    <button class="button-primary" type="submit" [disabled]="enregistrement() || !formulaire().valid()">
       {{ enregistrement() ? 'Enregistrement...' : 'Enregistrer le héros' }}
     </button>
   </form>

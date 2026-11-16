@@ -4,14 +4,19 @@
     <h2>Tier List des héros</h2>
   </div>
 
-  @if (heros.isLoading()) {
+  @if (erreurArmes()) {
+    <p class="status-message error" role="alert">Impossible de charger les bonus d’armes : {{ erreurArmes() }}</p>
+  }
+
+  @if (heros() === undefined) {
     <p class="status-message" role="status">Synchronisation des archives...</p>
-  } @else if (heros.error()) {
-    <p class="status-message error" role="alert">Impossible de charger les héros depuis Firestore.</p>
+  } @else if (erreurHeros()) {
+    <p class="status-message error" role="alert">Impossible de charger les héros : {{ erreurHeros() }}</p>
   } @else {
     @for (groupe of groupes(); track groupe.rang) {
       <section
         class="rank-row surface-panel"
+        [attr.aria-label]="'Rang ' + groupe.rang"
         [class.rank-s]="groupe.rang === 'S'"
         [class.rank-a]="groupe.rang === 'A'"
         [class.rank-b]="groupe.rang === 'B'"
@@ -20,20 +25,45 @@
       >
         <div class="rank-heading">
           <span class="rank-mark" aria-hidden="true"><span>{{ groupe.rang }}</span></span>
-          <h3>{{ groupe.nom }}</h3>
+          <span class="rank-rarity" role="img" [attr.aria-label]="'Rareté ' + groupe.etoiles + ' sur 5'">
+            @for (etoile of etoiles.slice(0, groupe.etoiles); track etoile) {
+              <span class="rarity-diamond" aria-hidden="true"></span>
+            }
+          </span>
           <span class="rank-count">{{ groupe.heros.length }} héros</span>
         </div>
         @if (groupe.heros.length > 0) {
           <ul class="hero-grid">
             @for (hero of groupe.heros; track hero.id; let index = $index) {
               <li class="hero-card cut-corners" [style.--card-index]="index">
-                <a class="hero-name" [routerLink]="['/heros', hero.id]">{{ hero.nom }}</a>
-                <span class="hero-class">{{ hero.classe }}</span>
+                <a
+                  class="hero-name"
+                  [routerLink]="['/heros', hero.id]"
+                >
+                  {{ hero.nom }}
+                </a>
+                <span class="hero-class">{{ hero.classe ?? 'Arme à définir' }} - {{ hero.archetype }}</span>
+                <span class="hero-weapon">Équipement : {{ armeNom(hero) }}</span>
                 <div class="hero-stats" aria-label="Caractéristiques">
-                  <span class="stat-chip"><b>PV</b>{{ hero.pointsDeVie }}</span>
-                  <span class="stat-chip"><b>ATK</b>{{ hero.attaque }}</span>
-                  <span class="stat-chip"><b>DEF</b>{{ hero.defense }}</span>
+                  @for (stat of stats; track stat) {
+                    @let breakdown = detailStat(hero, stat);
+                    <span class="stat-chip">
+                      <b>{{ stat }}</b>{{ breakdown.base }}
+                      @if (breakdown.arme) { <span class="bonus">+{{ breakdown.arme }}</span> }
+                      @if (breakdown.talent) { <span class="bonus">+{{ breakdown.talent }}</span> }
+                      @if (breakdown.archetype) { <span class="bonus">+{{ breakdown.archetype }}</span> }
+                    </span>
+                  }
+                  <span class="stat-chip"><b>CRIT</b>{{ hero.tauxCritique }}%</span>
+                  <span class="stat-chip"><b>DÉG CRIT</b>{{ hero.degatsCritiques }}%</span>
                 </div>
+                @if (hero.talents.length) {
+                  <span class="hero-talent">
+                    @for (talent of hero.talents; track $index) {
+                      {{ talent.stat }} +{{ talent.valeur }}
+                    }
+                  </span>
+                }
               </li>
             }
           </ul>

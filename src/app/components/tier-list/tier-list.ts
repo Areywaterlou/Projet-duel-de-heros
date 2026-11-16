@@ -1,15 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, inject, resource } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { HeroRank } from '../../data/hero';
+import { HERO_BASE_STATS, HERO_RANKS, HERO_RARITY } from '../../data/game-constants';
+import { heroStatBreakdown } from '../../data/hero-display';
+import type { Hero, HeroBaseStat } from '../../data/hero';
 import { FirebaseService } from '../../services/firebase.service';
-
-const RANKS: { rang: HeroRank; nom: string }[] = [
-  { rang: 'S', nom: 'Rang S — Légendaires' },
-  { rang: 'A', nom: 'Rang A — Élite' },
-  { rang: 'B', nom: 'Rang B — Solides' },
-  { rang: 'C', nom: 'Rang C — Moyens' },
-  { rang: 'D', nom: 'Rang D — À améliorer' }
-];
 
 @Component({
   selector: 'app-tier-list',
@@ -21,15 +15,28 @@ const RANKS: { rang: HeroRank; nom: string }[] = [
 export class TierListComponent {
   private readonly firebaseService = inject(FirebaseService);
 
-  protected readonly ranks = RANKS;
-  protected readonly heros = resource({
-    loader: () => this.firebaseService.obtenirHeros()
+  protected readonly rangs = HERO_RANKS;
+  protected readonly stats = HERO_BASE_STATS;
+  protected readonly etoiles = [1, 2, 3, 4, 5];
+  protected readonly heros = this.firebaseService.herosEnDirect;
+  protected readonly armes = this.firebaseService.armesEnDirect;
+  protected readonly erreurHeros = this.firebaseService.erreurHerosEnDirect;
+  protected readonly erreurArmes = this.firebaseService.erreurArmesEnDirect;
+  protected readonly groupes = computed(() => {
+    const heroes = [...(this.heros() ?? [])].sort((left, right) => left.nom.localeCompare(right.nom));
+    return this.rangs.map(rang => ({
+      rang,
+      etoiles: HERO_RARITY[rang],
+      heros: heroes.filter(hero => hero.rang === rang)
+    }));
   });
 
-  protected readonly groupes = computed(() =>
-    this.ranks.map(rank => ({
-      ...rank,
-      heros: (this.heros.value() ?? []).filter(hero => hero.rang === rank.rang)
-    }))
-  );
+  protected detailStat(hero: Hero, stat: HeroBaseStat) {
+    return heroStatBreakdown(hero, stat, this.armes() ?? []);
+  }
+
+  protected armeNom(hero: Hero): string {
+    return this.armes()?.find(arme => arme.id === hero.armeId)?.nom ?? 'Sans arme';
+  }
+
 }

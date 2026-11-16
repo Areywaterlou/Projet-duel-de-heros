@@ -1,0 +1,89 @@
+<section class="form-page">
+  <a class="back-link" routerLink="/armes">← Retour aux armes</a>
+  @if (chargementArme()) {
+    <p class="status-message" role="status">Chargement de l’arme...</p>
+  } @else if (armeId() && (erreurArmes() || arme() === null)) {
+    <p class="status-message error" role="alert">Cette arme est introuvable.</p>
+  } @else {
+    <p class="eyebrow">Équipement</p>
+    <h2>{{ armeId() ? 'Modifier une arme' : 'Créer une arme' }}</h2>
+    <form class="surface-panel weapon-form" (submit)="soumettre($event)" novalidate>
+      <label>
+        Nom
+        <input type="text" [formField]="formulaire.nom" autocomplete="off">
+      </label>
+      <label>
+        Type d’arme
+        <select [formField]="formulaire.type">
+          <option value="">Choisir un type</option>
+          @for (type of types; track type) {
+            <option [value]="type">{{ type }}</option>
+          }
+        </select>
+      </label>
+      <label>
+        Rareté
+        <select [value]="model().rarete" (change)="changerRarete($event)">
+          @for (rarete of raretes; track rarete) {
+            <option [value]="rarete">{{ rarete }}★</option>
+          }
+        </select>
+      </label>
+
+      <div class="stat-fields">
+        <section>
+          <h3>Caractéristique principale</h3>
+          <label>
+            Stat
+            <select [value]="model().statPrincipale" (change)="changerStat(true, $event)">
+              @for (stat of stats; track stat) {
+                <option [value]="stat">{{ statLabels[stat] }}</option>
+              }
+            </select>
+          </label>
+          <div class="stat-counter">
+            <div class="counter-heading">
+              <span>Bonus</span>
+              <output>{{ model().bonusPrincipal }}</output>
+            </div>
+            <progress [max]="bounds().primary.max" [value]="model().bonusPrincipal"></progress>
+            <div class="counter-buttons">
+              <button type="button" class="button-secondary" (click)="changerBonus(true, -1)" [disabled]="model().bonusPrincipal <= bounds().primary.min">−</button>
+              <button type="button" class="button-secondary" (click)="changerBonus(true, 1)" [disabled]="model().bonusPrincipal >= bounds().primary.max">+</button>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h3>Caractéristique secondaire</h3>
+          <label>
+            Stat
+            <select [value]="model().statSecondaire" (change)="changerStat(false, $event)">
+              @for (stat of stats; track stat) {
+                <option [value]="stat">{{ statLabels[stat] }}</option>
+              }
+            </select>
+          </label>
+          <div class="stat-counter">
+            <div class="counter-heading">
+              <span>Bonus</span>
+              <output>{{ model().bonusSecondaire }}</output>
+            </div>
+            <progress [max]="bounds().secondary.max" [value]="model().bonusSecondaire"></progress>
+            <div class="counter-buttons">
+              <button type="button" class="button-secondary" (click)="changerBonus(false, -1)" [disabled]="model().bonusSecondaire <= bounds().secondary.min">−</button>
+              <button type="button" class="button-secondary" (click)="changerBonus(false, 1)" [disabled]="model().bonusSecondaire >= bounds().secondary.max">+</button>
+            </div>
+          </div>
+        </section>
+      </div>
+      @if (formulaire().touched() && formulaire().invalid()) {
+        <p class="field-error" role="alert">Choisissez deux stats différentes et respectez les bonus de la rareté.</p>
+      }
+      @if (erreur()) { <p class="form-error" role="alert">{{ erreur() }}</p> }
+      <button class="button-primary" type="submit" [disabled]="enregistrement() || !formulaire().valid()">
+        {{ enregistrement() ? 'Enregistrement...' : 'Enregistrer l’arme' }}
+      </button>
+    </form>
+  }
+</section>
