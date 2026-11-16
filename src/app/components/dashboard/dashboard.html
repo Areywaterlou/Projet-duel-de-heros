@@ -1,0 +1,93 @@
+<section class="dashboard">
+  <header class="dashboard-heading">
+    <p class="eyebrow">Archives · Solaris-3</p>
+    <h2>Dashboard</h2>
+    <p>Les résonateurs, classés selon leurs caractéristiques.</p>
+  </header>
+
+  <div class="dashboard-controls" aria-label="Filtrer et trier les héros">
+    <label>Rechercher
+      <input type="search" [value]="recherche()" (input)="changerRecherche($event)" placeholder="Nom du héros">
+    </label>
+    <label>Rang
+      <select [value]="filtreRang()" (change)="changerFiltreRang($event)">
+        <option value="">Tous</option>
+        @for (rang of rangs; track rang) { <option [value]="rang">{{ rang }}</option> }
+      </select>
+    </label>
+    <label>Archétype
+      <select [value]="filtreClasse()" (change)="changerFiltreClasse($event)">
+        <option value="">Tous</option>
+        @for (classe of classes; track classe) { <option [value]="classe">{{ classe }}</option> }
+      </select>
+    </label>
+    <label>Trier par
+      <select [value]="tri()" (change)="changerTri($event)">
+        <option value="rang">Rang puis ATK</option>
+        <option value="nom">Nom</option>
+        <option value="attaque">ATK finale</option>
+        <option value="defense">DEF finale</option>
+        <option value="pv">PV finaux</option>
+        <option value="soin">Soin final</option>
+        <option value="esquive">ESQ finale</option>
+        <option value="tauxCritique">Taux critique</option>
+        <option value="degatsCritiques">Dégâts critiques</option>
+      </select>
+    </label>
+    <label>Ordre
+      <select [value]="ordre()" (change)="changerOrdre($event)">
+        <option value="desc">Décroissant</option>
+        <option value="asc">Croissant</option>
+      </select>
+    </label>
+  </div>
+
+  @if (heros() === undefined) {
+    <p class="status-message" role="status">Synchronisation des héros...</p>
+  } @else if (erreur()) {
+    <p class="status-message error" role="alert">Impossible de charger le dashboard : {{ erreur() }}</p>
+  } @else if (herosMarquants().length) {
+    <ul class="featured-grid">
+      @for (hero of herosMarquants(); track hero.id) {
+        <li class="surface-panel featured-card cut-corners">
+          <header>
+            <span class="rank-diamond rank-{{ hero.rang.toLowerCase() }}">
+              <span>{{ hero.rang }}</span>
+            </span>
+            <span>{{ hero.classe ?? 'Arme non définie' }} - {{ hero.archetype }}</span>
+          </header>
+          <h3>{{ hero.nom }}</h3>
+          <div class="featured-stats">
+            @for (stat of stats; track stat) {
+              @let breakdown = detailStat(hero, stat);
+              <span>
+                <b>{{ labels[stat] }}</b>
+                <span>{{ breakdown.base }}
+                  @if (breakdown.arme) { <span class="bonus" title="Bonus d’arme">+{{ breakdown.arme }}</span> }
+                  @if (breakdown.talent) { <span class="bonus" title="Bonus de talent">+{{ breakdown.talent }}</span> }
+                  @if (breakdown.archetype) { <span class="bonus" title="Bonus d’archétype">+{{ breakdown.archetype }}</span> }
+                </span>
+              </span>
+            }
+            <span><b>CRIT</b>{{ hero.tauxCritique }}%</span>
+            <span><b>DÉG CRIT</b>{{ hero.degatsCritiques }}%</span>
+          </div>
+          @if (hero.talents.length) {
+            <p class="talent">
+              @for (talent of hero.talents; track $index) {
+                <span>{{ talent.stat }} +{{ talent.valeur }}</span>
+              }
+            </p>
+          }
+          <footer>
+            <a [routerLink]="['/heros', hero.id]">Détail</a>
+            <a [routerLink]="['/heros', hero.id, 'edit']">Modifier</a>
+            <a [routerLink]="['/duel']" [queryParams]="{ hero: hero.id }">Jouer</a>
+          </footer>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="empty-state">Aucun héros ne correspond à ces critères.</p>
+  }
+</section>

@@ -1,0 +1,100 @@
+.weapon-page {
+  margin: 0 auto;
+  max-width: 1120px;
+}
+
+.page-heading {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1.4rem;
+}
+
+.page-heading h2 {
+  margin: 0;
+}
+
+.eyebrow {
+  color: #8bd9ea;
+  font-size: 0.8rem;
+  margin: 0 0 0.35rem;
+}
+
+.weapon-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.weapon-card {
+  color: inherit;
+  display: block;
+  min-height: 170px;
+  padding: 1.1rem;
+  text-decoration: none;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.weapon-card:hover,
+.weapon-card:focus-visible {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.weapon-card header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.weapon-type {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.weapon-rank {
+  color: var(--rank-color);
+  font-weight: 800;
+}
+
+.rank-s { --rank-color: var(--rank-s); }
+.rank-a { --rank-color: var(--rank-a); }
+.rank-b { --rank-color: var(--rank-b); }
+.rank-c { --rank-color: var(--rank-c); }
+.rank-d { --rank-color: var(--rank-d); }
+
+.weapon-card h3 {
+  margin: 0.8rem 0 1rem;
+}
+
+.weapon-stats {
+  display: grid;
+  gap: 0.4rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.weapon-stats span {
+  background: #0b1017;
+  border: 1px solid var(--line);
+  color: #e7edf5;
+  padding: 0.45rem;
+  text-align: center;
+}
+
+.weapon-stats b {
+  color: #8bd9ea;
+  display: block;
+  font-size: 0.7rem;
+  margin-bottom: 0.15rem;
+}
+
+.empty-state {
+  color: var(--muted);
+  padding: 2rem;
+  text-align: center;
+}

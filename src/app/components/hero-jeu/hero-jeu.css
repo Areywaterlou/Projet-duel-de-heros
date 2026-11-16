@@ -1,0 +1,102 @@
+.fighter {
+  background: linear-gradient(145deg, #18212c, #10161f);
+  border: 1px solid var(--line);
+  clip-path: var(--cut-corner);
+  padding: clamp(1rem, 3vw, 1.6rem);
+  transition: border-color 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+}
+
+.fighter.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 24px rgb(56 189 248 / 14%);
+}
+
+.fighter.defeated {
+  opacity: 0.55;
+}
+
+header {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  min-height: 54px;
+}
+
+.rank {
+  align-items: center;
+  border: 1px solid var(--rank-s);
+  color: var(--rank-s);
+  display: inline-flex;
+  height: 34px;
+  justify-content: center;
+  transform: rotate(45deg);
+  width: 34px;
+}
+
+.rank > span {
+  transform: rotate(-45deg);
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 0.76rem;
+  margin: 0 0 0.2rem;
+}
+
+h2 {
+  margin: 0;
+}
+
+.turn-indicator {
+  color: var(--accent);
+  font-size: 0.75rem;
+  margin-left: auto;
+}
+
+.health-label {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.4rem;
+}
+
+progress {
+  accent-color: var(--accent);
+  height: 10px;
+  margin: 0.5rem 0 1.2rem;
+  width: 100%;
+}
+
+.stats {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+
+.stats div {
+  background: rgb(255 255 255 / 4%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0.55rem 0.7rem;
+}
+
+.stats dt {
+  color: var(--muted);
+}
+
+.stats dd {
+  color: var(--accent);
+  font-weight: 700;
+  margin: 0;
+}
+
+.stats dd .bonus {
+  color: #34d399;
+  margin-left: 0.25rem;
+}
+
+.talent {
+  color: #ffd98a;
+  font-size: 0.82rem;
+  margin-bottom: 0;
+}

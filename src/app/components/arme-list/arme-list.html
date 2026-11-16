@@ -1,0 +1,58 @@
+<section class="weapon-page">
+  <header class="page-heading">
+    <div>
+      <p class="eyebrow">Archives · Équipement</p>
+      <h2>Armes</h2>
+    </div>
+    <a class="button-primary" routerLink="/armes/nouvelle">Créer une arme</a>
+  </header>
+
+  <div class="list-controls" aria-label="Filtrer et trier les armes">
+    <label>
+      Rechercher
+      <input type="search" [value]="filtreNom()" (input)="changerFiltre($event)" placeholder="Nom de l’arme">
+    </label>
+    <label>
+      Trier par bonus
+      <select [value]="triStat()" (change)="changerTri($event)">
+        <option value="attaque">Attaque</option>
+        <option value="esquive">Esquive</option>
+        <option value="soin">Soin</option>
+        <option value="pv">PV</option>
+      </select>
+    </label>
+    <label>
+      Ordre
+      <select [value]="ordreTri()" (change)="changerOrdre($event)">
+        <option value="desc">Décroissant</option>
+        <option value="asc">Croissant</option>
+      </select>
+    </label>
+  </div>
+
+  @if (armesSource() === undefined) {
+    <p class="status-message" role="status">Chargement des armes...</p>
+  } @else if (erreur()) {
+    <p class="status-message error" role="alert">Impossible de charger les armes : {{ erreur() }}</p>
+  } @else if (armes().length) {
+    <ul class="weapon-grid">
+      @for (arme of armes(); track arme.id) {
+        <li>
+          <a class="surface-panel weapon-card cut-corners" [routerLink]="['/armes', arme.id]">
+            <header>
+              <span class="weapon-type">{{ arme.type }}</span>
+              <span class="weapon-rank rank-{{ arme.rang.toLowerCase() }}">{{ arme.rarete }}★</span>
+            </header>
+            <h3>{{ arme.nom }}</h3>
+            <div class="weapon-stats" aria-label="Bonus d’arme">
+              <span><b>{{ arme.statPrincipale.toUpperCase() }}</b>+{{ arme.bonusPrincipal }}</span>
+              <span><b>{{ arme.statSecondaire.toUpperCase() }}</b>+{{ arme.bonusSecondaire }}</span>
+            </div>
+          </a>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="empty-state">Aucune arme ne correspond au filtre.</p>
+  }
+</section>

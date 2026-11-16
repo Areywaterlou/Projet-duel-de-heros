@@ -1,0 +1,22 @@
+[
+  {"nom":"Emerald of Genesis","type":"Épée","rarete":5,"statPrincipale":"attaque","bonusPrincipal":10,"statSecondaire":"esquive","bonusSecondaire":5},
+  {"nom":"Commando of Conviction","type":"Épée","rarete":4,"statPrincipale":"attaque","bonusPrincipal":8,"statSecondaire":"esquive","bonusSecondaire":4},
+  {"nom":"Dawnlit Verdict","type":"Épée","rarete":4,"statPrincipale":"esquive","bonusPrincipal":7,"statSecondaire":"attaque","bonusSecondaire":3},
+  {"nom":"Echoing Edge","type":"Épée","rarete":3,"statPrincipale":"attaque","bonusPrincipal":5,"statSecondaire":"esquive","bonusSecondaire":2},
+  {"nom":"Lustrous Razor","type":"Épée lourde","rarete":5,"statPrincipale":"attaque","bonusPrincipal":10,"statSecondaire":"pv","bonusSecondaire":5},
+  {"nom":"Autumntrace","type":"Épée lourde","rarete":4,"statPrincipale":"attaque","bonusPrincipal":8,"statSecondaire":"pv","bonusSecondaire":4},
+  {"nom":"Tidebound Resolve","type":"Épée lourde","rarete":4,"statPrincipale":"pv","bonusPrincipal":7,"statSecondaire":"attaque","bonusSecondaire":3},
+  {"nom":"Tempest Resonance","type":"Épée lourde","rarete":3,"statPrincipale":"attaque","bonusPrincipal":5,"statSecondaire":"pv","bonusSecondaire":2},
+  {"nom":"Static Mist","type":"Pistolets","rarete":5,"statPrincipale":"esquive","bonusPrincipal":10,"statSecondaire":"attaque","bonusSecondaire":5},
+  {"nom":"Undying Flame","type":"Pistolets","rarete":4,"statPrincipale":"esquive","bonusPrincipal":8,"statSecondaire":"attaque","bonusSecondaire":4},
+  {"nom":"Farstrike of Jinzhou","type":"Pistolets","rarete":4,"statPrincipale":"attaque","bonusPrincipal":7,"statSecondaire":"esquive","bonusSecondaire":3},
+  {"nom":"Signal of the Exile","type":"Pistolets","rarete":3,"statPrincipale":"esquive","bonusPrincipal":5,"statSecondaire":"attaque","bonusSecondaire":2},
+  {"nom":"Abyss Surges","type":"Gantelets","rarete":5,"statPrincipale":"defense","bonusPrincipal":10,"statSecondaire":"attaque","bonusSecondaire":5},
+  {"nom":"Hollow Mirage","type":"Gantelets","rarete":4,"statPrincipale":"defense","bonusPrincipal":8,"statSecondaire":"attaque","bonusSecondaire":4},
+  {"nom":"Ironclad Pulse","type":"Gantelets","rarete":4,"statPrincipale":"attaque","bonusPrincipal":7,"statSecondaire":"defense","bonusSecondaire":3},
+  {"nom":"Vibration Breaker","type":"Gantelets","rarete":3,"statPrincipale":"defense","bonusPrincipal":5,"statSecondaire":"attaque","bonusSecondaire":2},
+  {"nom":"Cosmic Ripples","type":"Rectifieur","rarete":5,"statPrincipale":"soin","bonusPrincipal":10,"statSecondaire":"pv","bonusSecondaire":5},
+  {"nom":"Jinzhou Keeper","type":"Rectifieur","rarete":4,"statPrincipale":"soin","bonusPrincipal":8,"statSecondaire":"pv","bonusSecondaire":4},
+  {"nom":"Moonlit Current","type":"Rectifieur","rarete":4,"statPrincipale":"pv","bonusPrincipal":7,"statSecondaire":"soin","bonusSecondaire":3},
+  {"nom":"Blooming Promise","type":"Rectifieur","rarete":3,"statPrincipale":"soin","bonusPrincipal":5,"statSecondaire":"pv","bonusSecondaire":2}
+]

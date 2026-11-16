@@ -1,0 +1,136 @@
+.duel-page {
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: clamp(1rem, 4vw, 2.5rem);
+}
+
+.page-heading {
+  margin-bottom: 1.6rem;
+}
+
+.page-heading p:last-child {
+  color: var(--muted);
+  margin-bottom: 0;
+}
+
+.duel-settings {
+  align-items: end;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
+}
+
+.duel-settings > label {
+  color: var(--muted);
+  display: grid;
+  gap: 0.4rem;
+}
+
+select {
+  background: #0b1017;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  min-height: 46px;
+  padding: 0.6rem;
+}
+
+.versus {
+  color: var(--rank-s);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  padding-bottom: 0.65rem;
+}
+
+.opponent-choice {
+  color: var(--muted);
+  display: grid;
+  gap: 0.35rem;
+  min-height: 46px;
+}
+
+.opponent-choice strong {
+  color: var(--ink);
+}
+
+.status-message {
+  color: var(--muted);
+  font-size: 0.86rem;
+  margin: 0.8rem 0 1.3rem;
+}
+
+.arena {
+  align-items: center;
+  display: grid;
+  gap: clamp(1rem, 3vw, 2rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 1.5rem 0;
+}
+
+.arena-center {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  justify-content: center;
+  min-height: 90px;
+}
+
+.winner {
+  color: var(--rank-s);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.turn-prompt {
+  color: var(--accent);
+  font-weight: 700;
+  margin: 0;
+}
+
+.combat-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  justify-content: center;
+}
+
+.combat-actions a {
+  align-items: center;
+  display: inline-flex;
+  text-decoration: none;
+}
+
+.combat-log {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  display: grid;
+  gap: 0.45rem;
+  list-style: none;
+  margin: 1.2rem 0 0;
+  padding: 1rem 0 0;
+}
+
+.combat-log .critical {
+  color: var(--rank-s);
+}
+
+.combat-log .heal {
+  color: #34d399;
+}
+
+@media (max-width: 760px) {
+  .duel-settings {
+    grid-template-columns: 1fr;
+  }
+
+  .versus {
+    display: none;
+  }
+
+  .arena {
+    grid-template-columns: 1fr;
+  }
+}

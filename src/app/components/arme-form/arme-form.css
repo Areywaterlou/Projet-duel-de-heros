@@ -1,0 +1,71 @@
+.form-page {
+  margin: 0 auto;
+  max-width: 680px;
+}
+
+.back-link {
+  color: var(--muted);
+  display: inline-flex;
+  margin-bottom: 1rem;
+  min-height: 44px;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: #8bd9ea;
+}
+
+.eyebrow {
+  color: #8bd9ea;
+  font-size: 0.8rem;
+  margin: 0 0 0.35rem;
+}
+
+.weapon-form {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1.1rem, 4vw, 2rem);
+}
+
+.weapon-form label {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.weapon-form input,
+.weapon-form select {
+  background: #0b1017;
+  border: 1px solid var(--line);
+  color: #e7edf5;
+  min-height: 46px;
+  padding: 0.6rem 0.75rem;
+}
+
+.weapon-form option {
+  background: #0f141c;
+}
+
+.form-help,
+.points-remaining {
+  color: #8bd9ea;
+  margin: 0;
+}
+
+.stat-fields {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field-error,
+.form-error,
+.error {
+  color: #ff9a9f;
+  margin: 0;
+}
+
+@media (max-width: 520px) {
+  .stat-fields {
+    grid-template-columns: 1fr;
+  }
+}

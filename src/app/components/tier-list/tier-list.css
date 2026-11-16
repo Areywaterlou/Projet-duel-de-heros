@@ -1,11 +1,15 @@
 .tier-list {
   display: grid;
+  background:
+    radial-gradient(ellipse at 10% 0, rgb(56 189 248 / 7%), transparent 34%),
+    #0b1017;
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
   gap: 1.15rem;
+  padding: clamp(1rem, 3vw, 2rem);
 }
 
 .page-heading .eyebrow {
-  color: var(--accent-strong);
-  font-family: 'Rajdhani', 'Arial Narrow', sans-serif;
+  color: #8bd9ea;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -17,54 +21,89 @@
   margin-bottom: 0.35rem;
 }
 
+.stat-legend,
+.hero-weapon {
+  color: #9eacba;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.hero-talent {
+  color: #ffd98a;
+  font-size: 0.8rem;
+}
+
 .rank-row {
   --rank-color: var(--rank-d);
   background:
-    radial-gradient(ellipse at 100% 0, color-mix(in srgb, var(--rank-color) 10%, transparent), transparent 48%),
-    var(--surface);
-  border-left: 4px solid var(--rank-color);
+    linear-gradient(110deg, color-mix(in srgb, var(--rank-color) 7%, transparent), transparent 52%),
+    #111821;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-left: 3px solid var(--rank-color);
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
   display: grid;
-  gap: 1rem;
+  gap: 0.9rem;
   padding: clamp(1rem, 3vw, 1.5rem);
 }
 
-.rank-s { --rank-color: var(--rank-s); }
-.rank-a { --rank-color: var(--rank-a); }
-.rank-b { --rank-color: var(--rank-b); }
-.rank-c { --rank-color: var(--rank-c); }
-.rank-d { --rank-color: var(--rank-d); }
+.rank-s { --rank-color: #e5b869; }
+.rank-a { --rank-color: #a855f7; }
+.rank-b { --rank-color: #38bdf8; }
+.rank-c { --rank-color: #34d399; }
+.rank-d { --rank-color: #94a3b8; }
 
 .rank-heading {
   align-items: center;
   display: flex;
-  gap: 0.9rem;
+  gap: 1rem;
   min-width: 0;
+  min-height: 48px;
 }
 
 .rank-mark {
   align-items: center;
-  background: color-mix(in srgb, var(--rank-color) 15%, white);
-  border: 1px solid color-mix(in srgb, var(--rank-color) 55%, white);
-  color: color-mix(in srgb, var(--rank-color) 70%, #17212b);
+  background: color-mix(in srgb, var(--rank-color) 20%, #111821);
+  border: 1px solid color-mix(in srgb, var(--rank-color) 78%, white);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--rank-color) 30%, transparent);
+  color: var(--rank-color);
   display: inline-flex;
-  flex: 0 0 42px;
-  height: 42px;
+  flex: 0 0 34px;
+  height: 34px;
   justify-content: center;
-  transform: rotate(45deg) scale(0.82);
+  margin: 0.35rem;
+  position: relative;
+  transform: rotate(45deg);
+}
+
+.rank-mark::before {
+  border: 1px solid color-mix(in srgb, var(--rank-color) 62%, transparent);
+  content: '';
+  inset: -5px;
+  position: absolute;
 }
 
 .rank-mark span {
+  font-size: 1rem;
   transform: rotate(-45deg);
 }
 
-.rank-heading h3 {
-  font-size: 1.25rem;
-  letter-spacing: 0.08em;
-  margin: 0;
+.rank-rarity {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.42rem;
+  margin-left: 0.25rem;
+}
+
+.rarity-diamond {
+  background: var(--rank-color);
+  box-shadow: 0 0 9px color-mix(in srgb, var(--rank-color) 65%, transparent);
+  height: 7px;
+  transform: rotate(45deg);
+  width: 7px;
 }
 
 .rank-count {
-  color: var(--muted);
+  color: #9eacba;
   font-size: 0.82rem;
   margin-left: auto;
   white-space: nowrap;
@@ -82,10 +121,10 @@
 .hero-card {
   animation: card-in 220ms ease-out both;
   animation-delay: calc(var(--card-index, 0) * 45ms);
-  background: rgb(255 255 255 / 84%);
-  border: 1px solid var(--line);
-  border-left: 3px solid color-mix(in srgb, var(--rank-color) 50%, white);
-  box-shadow: 0 4px 14px rgb(34 58 76 / 4%);
+  background: linear-gradient(145deg, #1a2430, #111821 72%);
+  border: 1px solid rgb(255 255 255 / 9%);
+  border-left: 2px solid color-mix(in srgb, var(--rank-color) 68%, #111821);
+  box-shadow: 0 5px 16px rgb(0 0 0 / 18%);
   display: grid;
   gap: 0.65rem;
   min-height: 132px;
@@ -94,13 +133,13 @@
 }
 
 .hero-card:hover {
-  border-color: var(--rank-color);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--rank-color) 12%, transparent);
+  border-color: color-mix(in srgb, var(--rank-color) 52%, #1a2430);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--rank-color) 14%, transparent);
   transform: translateY(-3px);
 }
 
 .hero-name {
-  color: var(--ink);
+  color: #f0f4f8;
   font-size: 1.12rem;
   font-weight: 700;
   position: relative;
@@ -127,7 +166,7 @@
 }
 
 .hero-class {
-  color: var(--muted);
+  color: #a9b5c3;
   font-size: 0.88rem;
 }
 
@@ -139,9 +178,9 @@
 
 .stat-chip {
   align-items: center;
-  background: linear-gradient(110deg, color-mix(in srgb, var(--rank-color) 10%, white), white);
-  border: 1px solid color-mix(in srgb, var(--rank-color) 20%, white);
-  color: var(--ink);
+  background: color-mix(in srgb, var(--rank-color) 9%, #141c26);
+  border: 1px solid color-mix(in srgb, var(--rank-color) 24%, #202a35);
+  color: #dce5ed;
   display: inline-flex;
   font-size: 0.75rem;
   gap: 0.35rem;
@@ -150,17 +189,35 @@
 }
 
 .stat-chip b {
-  color: color-mix(in srgb, var(--rank-color) 70%, #17212b);
+  color: var(--rank-color);
   font-family: 'Rajdhani', sans-serif;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
 }
 
+.stat-chip .bonus {
+  color: #34d399;
+}
+
 .empty {
-  color: var(--muted);
+  color: #9eacba;
   font-size: 0.9rem;
   font-style: italic;
   margin: 0;
+}
+
+@media (max-width: 480px) {
+  .tier-list {
+    padding: 1rem 0.75rem;
+  }
+
+  .rank-row {
+    padding: 0.9rem 0.75rem;
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 @keyframes card-in {

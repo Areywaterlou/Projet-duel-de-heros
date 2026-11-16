@@ -1,99 +1,95 @@
 <section class="hero-detail">
   <a class="back-link" routerLink="/tier-list">← Retour à la Tier List</a>
-
-  @if (hero.isLoading()) {
+  @if (chargementHero()) {
     <p class="status-message" role="status">Chargement des détails...</p>
   } @else if (messageErreurChargement()) {
     <p class="status-message error" role="alert">{{ messageErreurChargement() }}</p>
-  } @else if (hero.value(); as detail) {
+  } @else if (hero(); as detail) {
     <article class="surface-panel detail-card">
       <header>
         <div>
-          <p class="eyebrow">Fiche d'archive · {{ detail.classe }}</p>
+          <p class="eyebrow">{{ detail.classe ?? 'Arme à définir' }} - {{ detail.archetype }}</p>
           <h2>{{ detail.nom }}</h2>
         </div>
-        <span class="rank-badge rank-{{ detail.rang.toLowerCase() }}" aria-label="Rang {{ detail.rang }}">
-          <span>{{ detail.rang }}</span>
-        </span>
+        <span class="rank-badge rank-{{ rang().toLowerCase() }}"><span>{{ rang() }}</span></span>
       </header>
 
+      <p class="critical-stats">{{ detail.tauxCritique }} % crit · {{ detail.degatsCritiques }} % dégâts crit</p>
+      @if (detail.talents.length) {
+        <p class="talent">
+          @for (talent of detail.talents; track $index) {
+            <span>+{{ talent.valeur }} {{ talent.stat }}</span>
+          }
+        </p>
+      }
+
       <form (submit)="enregistrer($event)" novalidate>
-        <label>
-          Nom
-          <input type="text" [formField]="formulaire.nom" autocomplete="off">
-        </label>
-        @if (formulaire.nom().touched() && formulaire.nom().invalid()) {
-          <p class="field-error">Saisissez un nom valide de 1 à 60 caractères.</p>
-        }
+        <fieldset class="form-fields">
+          <label>
+            Nom
+            <input type="text" [formField]="formulaire.nom" autocomplete="off">
+          </label>
+          <label>
+            Archétype
+            <select [formField]="formulaire.archetype">
+              @for (archetype of archetypes; track archetype) {
+                <option [value]="archetype">{{ archetype }}</option>
+              }
+            </select>
+          </label>
+          <label>
+            Classe d’arme
+            <select [formField]="formulaire.classe">
+              <option value="">Choisir une classe</option>
+              @for (type of typesArme; track type) {
+                <option [value]="type">{{ type }}</option>
+              }
+            </select>
+          </label>
+          <label>
+            Arme équipée
+            <select [formField]="formulaire.armeId">
+              <option value="">Aucune arme</option>
+              @for (arme of armes() ?? []; track arme.id) {
+                <option [value]="arme.id">{{ arme.nom }} · {{ arme.type }}</option>
+              }
+            </select>
+          </label>
+          <output class="role-preview">{{ model().classe || 'Arme à définir' }} - {{ model().archetype }}</output>
+          <div class="points-remaining" role="status">
+            <span>{{ rang() }} · {{ totalPoints() }} points</span>
+            <span>{{ pointsRestants() }} restants</span>
+          </div>
+          <div class="stat-fields">
+            @for (stat of stats; track stat) {
+              <div class="stat-counter">
+                <div class="counter-heading">
+                  <label>{{ statLabels[stat] }}</label>
+                  <output>{{ model()[stat] }}</output>
+                </div>
+                <progress [max]="20" [value]="model()[stat]"></progress>
+                <div class="counter-buttons">
+                  <button type="button" class="button-secondary" (click)="changerStat(stat, -1)" [disabled]="model()[stat] <= 1">−</button>
+                  <button type="button" class="button-secondary" (click)="changerStat(stat, 1)" [disabled]="model()[stat] >= 20">+</button>
+                </div>
+              </div>
+            }
+          </div>
+          @if (erreurArmes()) {
+            <p class="field-error" role="alert">Impossible de charger les armes.</p>
+          }
+          @if (formulaire().touched() && formulaire().invalid()) {
+            <p class="field-error" role="alert">Répartissez de 10 à 40 points, avec 1 à 20 points par caractéristique.</p>
+          }
+        </fieldset>
 
-        <label>
-          Classe
-          <select [formField]="formulaire.classe">
-            <option value="">Choisir une classe</option>
-            <option value="Guerrier">Guerrier</option>
-            <option value="Mage">Mage</option>
-            <option value="Archer">Archer</option>
-            <option value="Voleur">Voleur</option>
-            <option value="Soigneur">Soigneur</option>
-            <option value="Autre">Autre</option>
-          </select>
-        </label>
-        @if (formulaire.classe().touched() && formulaire.classe().invalid()) {
-          <p class="field-error">Choisissez une classe.</p>
-        }
-
-        <label>
-          Points de vie
-          <input type="number" [formField]="formulaire.pointsDeVie">
-        </label>
-        @if (formulaire.pointsDeVie().touched() && formulaire.pointsDeVie().invalid()) {
-          <p class="field-error">Les points de vie doivent être supérieurs à zéro.</p>
-        }
-
-        <label>
-          Attaque
-          <input type="number" [formField]="formulaire.attaque">
-        </label>
-        @if (formulaire.attaque().touched() && formulaire.attaque().invalid()) {
-          <p class="field-error">L’attaque doit être positive ou nulle.</p>
-        }
-
-        <label>
-          Défense
-          <input type="number" [formField]="formulaire.defense">
-        </label>
-        @if (formulaire.defense().touched() && formulaire.defense().invalid()) {
-          <p class="field-error">La défense doit être positive ou nulle.</p>
-        }
-
-        <label>
-          Rang
-          <select [formField]="formulaire.rang">
-            <option value="S">S</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-          </select>
-        </label>
-
-        @if (erreur()) {
-          <p class="error" role="alert">{{ erreur() }}</p>
-        }
-        @if (succes()) {
-          <p class="success" role="status">{{ succes() }}</p>
-        }
-
+        @if (erreur()) { <p class="error" role="alert">{{ erreur() }}</p> }
+        @if (succes()) { <p class="success" role="status">{{ succes() }}</p> }
         <div class="actions">
-          <button class="button-primary" type="submit" [disabled]="enregistrement() || suppression()">
+          <button class="button-primary" type="submit" [disabled]="enregistrement() || suppression() || !formulaire().valid()">
             {{ enregistrement() ? 'Enregistrement...' : 'Enregistrer les modifications' }}
           </button>
-          <button
-            type="button"
-            class="button-danger"
-            (click)="supprimer()"
-            [disabled]="enregistrement() || suppression()"
-          >
+          <button type="button" class="button-danger" (click)="supprimer()" [disabled]="enregistrement() || suppression()">
             {{ suppression() ? 'Suppression...' : 'Supprimer le héros' }}
           </button>
         </div>

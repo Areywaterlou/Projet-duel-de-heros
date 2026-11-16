@@ -1,0 +1,18 @@
+@if (notifications().length > 0) {
+  <aside class="toast-container" aria-label="Notifications" aria-live="polite">
+    @for (notification of notifications(); track notification.id) {
+      <div
+        class="toast-item"
+        [class.toast-success]="notification.type === 'success'"
+        [class.toast-info]="notification.type === 'info'"
+        [class.toast-leaving]="notification.isLeaving"
+        role="status"
+      >
+        <span class="toast-icon" aria-hidden="true">
+          {{ notification.type === 'success' ? '✓' : '◇' }}
+        </span>
+        <span>{{ notification.message }}</span>
+      </div>
+    }
+  </aside>
+}

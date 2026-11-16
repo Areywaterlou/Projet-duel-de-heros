@@ -1,0 +1,58 @@
+<section class="weapon-detail">
+  <a class="back-link" routerLink="/armes">← Retour aux armes</a>
+
+  @if (chargementArme()) {
+    <p class="status-message" role="status">Chargement de l’arme...</p>
+  } @else if (erreurArmes() || arme() === null) {
+    <p class="status-message error" role="alert">
+      {{ erreurArmes() ? 'Impossible de charger cette arme : ' + erreurArmes() : 'Cette arme est introuvable.' }}
+    </p>
+  } @else if (arme(); as detail) {
+    <article class="surface-panel detail-card">
+      <header class="weapon-header">
+        <div>
+          <p class="eyebrow">{{ detail.type }} · {{ detail.rarete }}★</p>
+          <h2>{{ detail.nom }}</h2>
+        </div>
+        <a class="button-secondary" [routerLink]="['/armes', detail.id, 'edit']">Modifier</a>
+      </header>
+
+      <h3>Bonus de l’arme</h3>
+      <div class="weapon-stats">
+        <span><b>{{ detail.statPrincipale }}</b>+{{ detail.bonusPrincipal }}</span>
+        <span><b>{{ detail.statSecondaire }}</b>+{{ detail.bonusSecondaire }}</span>
+      </div>
+
+      <h3>Héros équipés</h3>
+      @if (chargementHeros()) {
+        <p role="status">Recherche des héros équipés...</p>
+      } @else if (erreurHeros()) {
+        <p class="error" role="alert">Impossible de charger la liste des héros équipés : {{ erreurHeros() }}</p>
+      } @else if (heros().length) {
+        <ul class="equipped-heroes">
+          @for (hero of heros(); track hero.id) {
+            <li><a [routerLink]="['/heros', hero.id]">{{ hero.nom }}</a></li>
+          }
+        </ul>
+        <p class="field-error" role="status">Déséquipez ces héros avant de supprimer l’arme.</p>
+      } @else {
+        <p class="muted">Aucun héros n’est équipé de cette arme.</p>
+      }
+
+      @if (erreur()) {
+        <p class="error" role="alert">{{ erreur() }}</p>
+      }
+
+      <footer class="actions">
+        <button
+          class="button-danger"
+          type="button"
+          (click)="supprimer()"
+          [disabled]="suppression() || !peutSupprimer()"
+        >
+          {{ suppression() ? 'Suppression...' : 'Supprimer l’arme' }}
+        </button>
+      </footer>
+    </article>
+  }
+</section>

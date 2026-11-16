@@ -1,0 +1,141 @@
+.dashboard {
+  margin: 0 auto;
+  max-width: 1120px;
+}
+
+.dashboard-heading {
+  margin-bottom: 1.4rem;
+}
+
+.dashboard-heading .eyebrow {
+  color: #8bd9ea;
+  font-size: 0.8rem;
+  margin: 0 0 0.35rem;
+}
+
+.dashboard-heading h2 {
+  margin: 0 0 0.35rem;
+}
+
+.dashboard-heading > p:last-child {
+  color: var(--muted);
+}
+
+.dashboard-controls {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+  margin-bottom: 1.2rem;
+}
+
+.dashboard-controls label {
+  color: var(--muted);
+  display: grid;
+  gap: 0.35rem;
+}
+
+.dashboard-controls input,
+.dashboard-controls select {
+  background: #0b1017;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  min-height: 42px;
+  padding: 0.55rem;
+}
+
+.featured-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.featured-card {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1.15rem;
+}
+
+.featured-card > header {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  gap: 0.75rem;
+}
+
+.rank-diamond {
+  align-items: center;
+  border: 1px solid currentColor;
+  display: inline-flex;
+  height: 28px;
+  justify-content: center;
+  transform: rotate(45deg);
+  width: 28px;
+}
+
+.rank-diamond > span {
+  transform: rotate(-45deg);
+}
+
+.rank-s { color: var(--rank-s); }
+.rank-a { color: var(--rank-a); }
+.rank-b { color: var(--rank-b); }
+.rank-c { color: var(--rank-c); }
+.rank-d { color: var(--rank-d); }
+
+.featured-card h3 {
+  margin: 0;
+}
+
+.featured-stats {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.featured-stats > span {
+  background: #0b1017;
+  border: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0.55rem;
+}
+
+.featured-stats > span > span {
+  display: inline-flex;
+  gap: 0.3rem;
+}
+
+.featured-stats b {
+  color: #8bd9ea;
+  font-size: 0.75rem;
+}
+
+.bonus {
+  color: #34d399;
+}
+
+.talent {
+  color: #ffd98a;
+  font-size: 0.82rem;
+  margin: 0;
+}
+
+.featured-card footer {
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 1rem;
+  padding-top: 0.75rem;
+}
+
+.featured-card footer a {
+  color: #8bd9ea;
+  font-weight: 700;
+}
+
+.empty-state {
+  color: var(--muted);
+  padding: 2rem;
+  text-align: center;
+}

@@ -4,7 +4,7 @@
 }
 
 .eyebrow {
-  color: var(--accent-strong);
+  color: #8bd9ea;
   font-size: 0.8rem;
   margin: 0 0 0.35rem;
 }
@@ -24,26 +24,44 @@
   gap: 0.4rem;
 }
 
+.points-remaining,
+.form-section-label {
+  color: #8bd9ea;
+  font-weight: 700;
+  margin: 0;
+}
+
+.role-preview {
+  color: #a7b3c2;
+  font-size: 0.9rem;
+  margin-top: -0.5rem;
+}
+
 .hero-form input,
 .hero-form select {
-  background: rgb(255 255 255 / 86%);
+  background: #0b1017;
   border: 1px solid var(--line);
   border-radius: 0;
-  color: var(--ink);
+  color: #e7edf5;
   min-height: 48px;
   padding: 0.65rem 0.8rem;
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
 .hero-form input::placeholder {
-  color: #99a5af;
+  color: #8190a0;
 }
 
 .hero-form input:focus,
 .hero-form select:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgb(25 195 214 / 12%);
+  box-shadow: 0 0 0 3px rgb(56 189 248 / 16%);
   outline: none;
+}
+
+.hero-form option {
+  background: #0f141c;
+  color: #e7edf5;
 }
 
 .hero-form .button-primary {

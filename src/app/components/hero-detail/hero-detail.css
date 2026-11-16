@@ -17,7 +17,7 @@
 }
 
 .back-link:hover {
-  color: var(--accent-strong);
+  color: #8bd9ea;
 }
 
 .detail-card {
@@ -39,16 +39,17 @@
 }
 
 .eyebrow {
-  color: var(--accent-strong);
+  color: #8bd9ea;
   font-size: 0.78rem;
   margin: 0 0 0.35rem;
 }
 
 .rank-badge {
   align-items: center;
-  background: color-mix(in srgb, var(--rank-color) 16%, white);
-  border: 1px solid color-mix(in srgb, var(--rank-color) 50%, white);
-  color: color-mix(in srgb, var(--rank-color) 70%, #17212b);
+  background: color-mix(in srgb, var(--rank-color) 18%, #0f141c);
+  border: 1px solid color-mix(in srgb, var(--rank-color) 64%, transparent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--rank-color) 22%, transparent);
+  color: var(--rank-color);
   display: inline-flex;
   flex: 0 0 58px;
   height: 58px;
@@ -71,6 +72,28 @@
   gap: 0.9rem;
 }
 
+.form-fields {
+  border: 0;
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.points-remaining,
+.form-section-label {
+  color: #8bd9ea;
+  font-weight: 700;
+  margin: 0;
+}
+
+.role-preview {
+  color: #a7b3c2;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
 .hero-detail label {
   display: grid;
   gap: 0.4rem;
@@ -78,10 +101,10 @@
 
 .hero-detail input,
 .hero-detail select {
-  background: rgb(255 255 255 / 88%);
+  background: #0b1017;
   border: 1px solid var(--line);
   border-radius: 0;
-  color: var(--ink);
+  color: #e7edf5;
   min-height: 48px;
   padding: 0.65rem 0.8rem;
   transition: border-color 160ms ease, box-shadow 160ms ease;
@@ -90,8 +113,13 @@
 .hero-detail input:focus,
 .hero-detail select:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgb(25 195 214 / 12%);
+  box-shadow: 0 0 0 3px rgb(56 189 248 / 16%);
   outline: none;
+}
+
+.hero-detail option {
+  background: #0f141c;
+  color: #e7edf5;
 }
 
 .actions {
@@ -105,11 +133,11 @@
 
 .error,
 .field-error {
-  color: #a9373e;
+  color: #ff9a9f;
 }
 
 .success {
-  color: #26734f;
+  color: #6ee7b7;
 }
 
 @media (max-width: 520px) {
